@@ -24,6 +24,14 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
    summation with application to computational geometry, Numerical Algorithms,
    volume 37, number 1-4, pages 101--112, 2004. */
 
+/* Note about the 3.1 branch and earlier: the "const" in the prototypes of
+   mpfr_sum and related functions is in an incorrect position. This bug is
+   present in the source only (since r3642); the MPFR manual is correct.
+   This is fixed in the trunk for the future MPFR 4.0.0. Let's not change
+   the 3.1 branch as it may be seen as an ABI breakage and this bug does
+   not have any consequence for the API.
+*/
+
 #define MPFR_NEED_LONGLONG_H
 #include "mpfr-impl.h"
 
