@@ -74,6 +74,11 @@ do
     echo "Missing '#include \"mpfr-impl.h\"' in $file?"
 done
 
+# "mpfr-impl.h" must not be included directly by the test programs.
+# Otherwise __MPFR_WITHIN_MPFR will be defined, yielding failures
+# under MS Windows with DLL.
+grep --exclude=mpfr-test.h '^ *# *include *"mpfr-impl.h"' tests/*.{c,h}
+
 # mpfr_printf-like functions shouldn't be used in the tests,
 # as they need <stdarg.h> (HAVE_STDARG defined).
 for file in tests/*.c
