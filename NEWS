@@ -20,6 +20,14 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
 
 ##############################################################################
 
+Changes from version 3.1.5 to version 3.1.6:
+- Improved MPFR manual.
+- Bug fixes (see <http://www.mpfr.org/mpfr-3.1.5/#fixed> and ChangeLog file).
+- Autotools: Under Linux, make sure that the old dtags (when supported)
+  are used if LD_LIBRARY_PATH is defined; otherwise "make check" would
+  check an installed, compatible MPFR library found in LD_LIBRARY_PATH
+  instead of the one that has been built with "make".
+
 Changes from version 3.1.4 to version 3.1.5:
 - C++11 compatibility.
 - Bug fixes (see <http://www.mpfr.org/mpfr-3.1.4/#fixed> and ChangeLog file).
