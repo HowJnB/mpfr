@@ -943,6 +943,23 @@ with an implementation-defined TLS specifier).
 @c is just a GCC extension. There is currently no clear documentation
 @c about TLS variable initialization.
 
+By default, MPFR currently uses the GMP memory allocators
+@ifinfo
+(@pxref{Custom Allocation,,, gmp.info,GNU MP})
+@end ifinfo
+@ifnotinfo
+(see Section ``Custom Allocation'' in @cite{GNU MP})
+@end ifnotinfo
+instead of @code{malloc} for all its allocations. But since caches have
+been introduced in MPFR and nothing had been documented about necessary
+clean-up if the GMP allocators had to be changed (by the application or
+another library), the current GMP allocators are memorized the first
+time they are used by MPFR, and MPFR will always use these allocators.
+This means that the allocators need to remain valid as long as MPFR is
+used. To avoid this requirement, MPFR 4 will handle memory allocation
+differently, and applications that change the allocators may have to be
+slightly modified.
+
 @node MPFR Interface, API Compatibility, MPFR Basics, Top
 @comment  node-name,  next,  previous,  up
 @chapter MPFR Interface
