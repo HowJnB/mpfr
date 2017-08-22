@@ -2740,6 +2740,15 @@ created using the GMP @code{gmp_randinit} function (see the GMP manual).
 
 Note: the note for @code{mpfr_urandomb} holds too. In addition, the exponent
 range and the rounding mode might have a side effect on the next random state.
+
+The rule for the underflow flag is here ``underflow before rounding''
+instead of the usual ``underflow after rounding''. The reason is that
+the exponent is drawn first, and if it is smaller than the minimum
+exponent, the significand is not drawn. To fix the behavior on the
+underflow flag, one would have to draw the significand in some cases,
+meaning that the behavior of the random generator would change, thus
+it would break the ABI for the MPFR 3.1 branch. However, the observed
+behavior always corresponds to an existing number.
 @end deftypefun
 
 @deftypefun int mpfr_grandom (mpfr_t @var{rop1}, mpfr_t @var{rop2}, gmp_randstate_t @var{state}, mpfr_rnd_t @var{rnd})
