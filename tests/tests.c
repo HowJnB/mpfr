@@ -321,7 +321,6 @@ tests_limit_start (void)
 static void
 tests_rand_start (void)
 {
-  gmp_randstate_ptr  rands;
   char           *perform_seed;
   unsigned long  seed;
 
@@ -335,7 +334,6 @@ tests_rand_start (void)
 
   gmp_randinit_default (__gmp_rands);
   __gmp_rands_initialized = 1;
-  rands = __gmp_rands;
 
   perform_seed = getenv ("GMP_CHECK_RANDOMIZE");
   if (perform_seed != NULL)
@@ -344,7 +342,7 @@ tests_rand_start (void)
       if (! (seed == 0 || seed == 1))
         {
           printf ("Re-seeding with GMP_CHECK_RANDOMIZE=%lu\n", seed);
-          gmp_randseed_ui (rands, seed);
+          gmp_randseed_ui (mpfr_rands, seed);
         }
       else
         {
@@ -357,13 +355,13 @@ tests_rand_start (void)
           time (&tv);
           seed = tv;
 #endif
-          gmp_randseed_ui (rands, seed);
+          gmp_randseed_ui (mpfr_rands, seed);
           printf ("Seed GMP_CHECK_RANDOMIZE=%lu "
                   "(include this in bug reports)\n", seed);
         }
     }
   else
-      gmp_randseed_ui (rands, 0x2143FEDC);
+    gmp_randseed_ui (mpfr_rands, 0x2143FEDC);
 }
 
 static void
