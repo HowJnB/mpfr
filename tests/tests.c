@@ -342,7 +342,7 @@ tests_rand_start (void)
       if (! (seed == 0 || seed == 1))
         {
           printf ("Re-seeding with GMP_CHECK_RANDOMIZE=%lu\n", seed);
-          gmp_randseed_ui (mpfr_rands, seed);
+          gmp_randseed_ui (__gmp_rands, seed);
         }
       else
         {
@@ -355,13 +355,13 @@ tests_rand_start (void)
           time (&tv);
           seed = tv;
 #endif
-          gmp_randseed_ui (mpfr_rands, seed);
+          gmp_randseed_ui (__gmp_rands, seed);
           printf ("Seed GMP_CHECK_RANDOMIZE=%lu "
                   "(include this in bug reports)\n", seed);
         }
     }
   else
-    gmp_randseed_ui (mpfr_rands, 0x2143FEDC);
+    gmp_randseed_ui (__gmp_rands, 0x2143FEDC);
 }
 
 static void

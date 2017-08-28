@@ -264,7 +264,7 @@ underflow_tests (void)
         for (k = 0; k < 100; k++)
           {
             mpfr_clear_flags ();
-            inex = mpfr_urandom (x, mpfr_rands, (mpfr_rnd_t) rnd);
+            inex = mpfr_urandom (x, RANDS, (mpfr_rnd_t) rnd);
             flags = __gmpfr_flags;
             MPFR_ASSERTN (mpfr_inexflag_p ());
             if (MPFR_IS_NEG (x))
@@ -328,7 +328,7 @@ overflow_tests (void)
         for (k = 0; k < 100; k++)
           {
             mpfr_clear_flags ();
-            inex = mpfr_urandom (x, mpfr_rands, (mpfr_rnd_t) rnd);
+            inex = mpfr_urandom (x, RANDS, (mpfr_rnd_t) rnd);
             flags = __gmpfr_flags;
             MPFR_ASSERTN (mpfr_inexflag_p ());
             if (MPFR_IS_NEG (x))
