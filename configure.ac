@@ -263,7 +263,7 @@ dnl with the mode32 ABI, e.g. "-m32 -mpowerpc64 -mtune=970 -O3"; this
 dnl is detected by the x != x test below.
 AC_ARG_ENABLE(decimal-float,
    [  --enable-decimal-float  build conversion functions from/to decimal floats
-                          [[default=no]]],
+                          (requires --with-gmp-build) [[default=no]]],
    [ case $enableval in
       yes) AC_DEFINE([MPFR_WANT_DECIMAL_FLOATS],1,
               [Build decimal float functions])
