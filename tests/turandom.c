@@ -309,6 +309,30 @@ underflow_tests (void)
 }
 
 static void
+test_underflow (int verbose)
+{
+  mpfr_t x;
+  mpfr_exp_t emin = mpfr_get_emin ();
+  int i, exp[5] = {0, 0, 0, 0, 0};
+
+  mpfr_init2 (x, 2);
+  mpfr_set_emin (-3);
+  for (i = 0; i < 1000000; i++)
+    {
+      mpfr_urandom (x, RANDS, MPFR_RNDN);
+      if (mpfr_zero_p (x))
+        exp[4] ++;
+      else
+        exp[-mpfr_get_exp(x)] ++;
+    }
+  if (verbose)
+    printf ("exp=0:%d -1:%d -2:%d -3:%d x=0:%d\n",
+            exp[0], exp[1], exp[2], exp[3], exp[4]);
+  mpfr_clear (x);
+  mpfr_set_emin (emin);
+}
+
+static void
 overflow_tests (void)
 {
   mpfr_t x;
@@ -517,6 +541,7 @@ main (int argc, char *argv[])
   bug20100914 ();
   bug20170123 ();
   reprod_abi ();
+  test_underflow (verbose);
 
   tests_end_mpfr ();
   return 0;
