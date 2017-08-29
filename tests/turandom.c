@@ -313,7 +313,7 @@ test_underflow (int verbose)
 {
   mpfr_t x;
   mpfr_exp_t emin = mpfr_get_emin ();
-  int i, exp[5] = {0, 0, 0, 0, 0};
+  int i, exp[6] = {0, 0, 0, 0, 0, 0};
 
   mpfr_init2 (x, 2);
   mpfr_set_emin (-3);
@@ -321,13 +321,14 @@ test_underflow (int verbose)
     {
       mpfr_urandom (x, RANDS, MPFR_RNDN);
       if (mpfr_zero_p (x))
-        exp[4] ++;
+        exp[5] ++;
       else
-        exp[-mpfr_get_exp(x)] ++;
+        /* exp=1 is possible if the generated number is 0.111111... */
+        exp[1-mpfr_get_exp(x)] ++;
     }
   if (verbose)
-    printf ("exp=0:%d -1:%d -2:%d -3:%d x=0:%d\n",
-            exp[0], exp[1], exp[2], exp[3], exp[4]);
+    printf ("exp=1:%d 0:%d -1:%d -2:%d -3:%d x=0:%d\n",
+            exp[0], exp[1], exp[2], exp[3], exp[4], exp[5]);
   mpfr_clear (x);
   mpfr_set_emin (emin);
 }
