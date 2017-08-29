@@ -120,10 +120,16 @@ mpfr_urandom (mpfr_ptr rop, gmp_randstate_t rstate, mpfr_rnd_t rnd_mode)
              in a row, then return 0 or the smallest representable
              positive number.
 
-             The rounding to nearest mode is subtle:
-             If exp == emin - 1, the rounding bit is set, except
-             if cnt == DRAW_BITS in which case the rounding bit is
-             outside rp[0] and must be generated. */
+             The rounding-to-nearest mode is subtle: We need to round to
+             the smallest representable positive number iff the exponent
+             is emin - 1. This condition can be satisfied only if the
+             current emin is emin - 1. In this case, if cnt != DRAW_BITS,
+             this in the final emin, so that the condition is satisfied.
+             But if cnt == DRAW_BITS, we need to draw an additional bit
+             to determine whether emin == emin - 1 or emin < emin - 1
+             (with equal probabilities); the reason is that we return
+             just below instead of doing more iterations in the "while"
+             loop to find the final value of emin. */
           __gmpfr_flags |= MPFR_FLAGS_UNDERFLOW;
           if (rnd_mode == MPFR_RNDU || rnd_mode == MPFR_RNDA
               || (rnd_mode == MPFR_RNDN && exp == __gmpfr_emin - 1
