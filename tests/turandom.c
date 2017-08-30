@@ -317,7 +317,8 @@ test_underflow (int verbose)
 
   mpfr_init2 (x, 2);
   mpfr_set_emin (-3);
-  for (i = 0; i < 1000000; i++)
+#define N 1000000
+  for (i = 0; i < N; i++)
     {
       mpfr_urandom (x, RANDS, MPFR_RNDN);
       if (mpfr_zero_p (x))
@@ -327,10 +328,17 @@ test_underflow (int verbose)
         exp[1-mpfr_get_exp(x)] ++;
     }
   if (verbose)
-    printf ("exp=1:%d 0:%d -1:%d -2:%d -3:%d x=0:%d\n",
-            exp[0], exp[1], exp[2], exp[3], exp[4], exp[5]);
+    printf ("exp=1:%.3f(%.3f) 0:%.3f(%.3f) -1:%.3f(%.3f) -2:%.3f(%.3f) "
+            "-3:%.3f(%.3f) zero:%.3f(%.3f)\n",
+            100.0 * (double) exp[0] / (double) N, 12.5,
+            100.0 * (double) exp[1] / (double) N, 43.75,
+            100.0 * (double) exp[2] / (double) N, 21.875,
+            100.0 * (double) exp[3] / (double) N, 10.9375,
+            100.0 * (double) exp[4] / (double) N, 7.8125,
+            100.0 * (double) exp[5] / (double) N, 3.125);
   mpfr_clear (x);
   mpfr_set_emin (emin);
+#undef N
 }
 
 static void
