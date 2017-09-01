@@ -313,7 +313,7 @@ test_underflow (int verbose)
 {
   mpfr_t x;
   mpfr_exp_t emin = mpfr_get_emin ();
-  int i, exp[6] = {0, 0, 0, 0, 0, 0};
+  long i, exp[6] = {0, 0, 0, 0, 0, 0};
 
   mpfr_init2 (x, 2);
   mpfr_set_emin (-3);
