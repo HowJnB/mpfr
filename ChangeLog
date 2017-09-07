@@ -1,4 +1,120 @@
 ------------------------------------------------------------------------
+r11719 | vlefevre | 2017-09-07 11:36:44 +0000 (Thu, 07 Sep 2017) | 1 line
+Changed paths:
+   M /branches/3.1/VERSION
+   M /branches/3.1/configure.ac
+   M /branches/3.1/doc/mpfr.texi
+   M /branches/3.1/src/mpfr.h
+   M /branches/3.1/src/version.c
+
+Updated version to 3.1.6.
+------------------------------------------------------------------------
+r11710 | vlefevre | 2017-09-05 15:17:22 +0000 (Tue, 05 Sep 2017) | 1 line
+Changed paths:
+   M /branches/3.1/doc/mpfr.texi
+
+[doc/mpfr.texi] Updated the month.
+------------------------------------------------------------------------
+r11709 | vlefevre | 2017-09-05 12:59:09 +0000 (Tue, 05 Sep 2017) | 2 lines
+Changed paths:
+   M /branches/3.1/VERSION
+   M /branches/3.1/configure.ac
+   M /branches/3.1/doc/mpfr.texi
+   M /branches/3.1/src/mpfr.h
+   M /branches/3.1/src/version.c
+
+Updated version to 3.1.6-rc2 (at least for the developers, so that
+intermediate versions with new changes cannot be confused with rc1).
+------------------------------------------------------------------------
+r11708 | vlefevre | 2017-09-05 12:55:34 +0000 (Tue, 05 Sep 2017) | 4 lines
+Changed paths:
+   M /branches/3.1
+   M /branches/3.1/tests/tsprintf.c
+
+[tests/tsprintf.c] With MPFR_CHECK_LIBC_PRINTF, disable the test of
+the "'" flag with a non-glibc C library (SUS extension in printf).
+In particular, it is not supported by AIX 7.2.
+(merged changesets r11704,11706 from the trunk)
+------------------------------------------------------------------------
+r11707 | vlefevre | 2017-09-05 12:54:34 +0000 (Tue, 05 Sep 2017) | 5 lines
+Changed paths:
+   M /branches/3.1
+   M /branches/3.1/src
+   M /branches/3.1/src/mpfr-impl.h
+
+[src/mpfr-impl.h] In case decimal_point and/or thousands_sep are
+non-single-byte characters (as found on FreeBSD 11 in fr_FR.UTF-8),
+revert to the default value. Added a FIXME to support multibyte
+decimal_point and thousands_sep.
+(merged changeset r11705 from the trunk)
+------------------------------------------------------------------------
+r11703 | vlefevre | 2017-09-05 11:40:33 +0000 (Tue, 05 Sep 2017) | 10 lines
+Changed paths:
+   M /branches/3.1
+   M /branches/3.1/tests/Makefile.am
+   M /branches/3.1/tests/tfprintf.c
+   M /branches/3.1/tests/tout_str.c
+   M /branches/3.1/tests/toutimpl.c
+   M /branches/3.1/tests/tprintf.c
+
+[tests]
+  * tfprintf.c, tout_str.c, tprintf.c: Do not use the same filename
+    for result files created in these test programs, as this may break
+    parallel tests.
+  * toutimpl.c: Changed the filename of the result file like what
+    has been done in other test programs, to make sure that it will
+    not be reused by mistake. Removed comments about tmpname (which
+    does not exist).
+  * Makefile.am: added a CLEANFILES line with these files.
+(merged changesets r11698-11699 from the trunk)
+------------------------------------------------------------------------
+r11694 | vlefevre | 2017-09-01 15:17:43 +0000 (Fri, 01 Sep 2017) | 1 line
+Changed paths:
+   M /branches/3.1/tests/turandom.c
+
+[tests/turandom.c] Correction for 16-bit int.
+------------------------------------------------------------------------
+r11693 | zimmerma | 2017-08-30 06:57:37 +0000 (Wed, 30 Aug 2017) | 2 lines
+Changed paths:
+   M /branches/3.1/tests/turandom.c
+
+[tests/turandom.c] print got/expected probabilities in test_underflow()
+
+------------------------------------------------------------------------
+r11692 | zimmerma | 2017-08-29 12:58:37 +0000 (Tue, 29 Aug 2017) | 2 lines
+Changed paths:
+   M /branches/3.1/tests/turandom.c
+
+[tests/turandom.c] forgot exp=1 case
+
+------------------------------------------------------------------------
+r11691 | zimmerma | 2017-08-29 12:52:50 +0000 (Tue, 29 Aug 2017) | 2 lines
+Changed paths:
+   M /branches/3.1/tests/turandom.c
+
+added test_underflow()
+
+------------------------------------------------------------------------
+r11689 | vlefevre | 2017-08-29 12:17:13 +0000 (Tue, 29 Aug 2017) | 1 line
+Changed paths:
+   M /branches/3.1/src/urandom.c
+
+[src/urandom.c] Clarified a comment about a subtle case.
+------------------------------------------------------------------------
+r11687 | vlefevre | 2017-08-28 20:58:45 +0000 (Mon, 28 Aug 2017) | 3 lines
+Changed paths:
+   M /branches/3.1/configure.ac
+
+[configure.ac] In "configure --help" output for --enable-decimal-float,
+mention that this option requires --with-gmp-build (this is for the 3.1
+branch only).
+------------------------------------------------------------------------
+r11682 | vlefevre | 2017-08-28 11:25:28 +0000 (Mon, 28 Aug 2017) | 1 line
+Changed paths:
+   M /branches/3.1/ChangeLog
+
+ChangeLog update with "TZ=UTC svn log -rHEAD:0 -v" (in UTF-8 locales).
+------------------------------------------------------------------------
 r11681 | vlefevre | 2017-08-28 11:23:02 +0000 (Mon, 28 Aug 2017) | 2 lines
 Changed paths:
    M /branches/3.1/VERSION
