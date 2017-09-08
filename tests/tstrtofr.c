@@ -1079,7 +1079,7 @@ bug20081028 (void)
 }
 
 /* check that 1.23e is correctly parsed, cf
-   http://gmplib.org/list-archives/gmp-bugs/2010-March/001898.html */
+   https://gmplib.org/list-archives/gmp-bugs/2010-March/001898.html */
 static void
 test20100310 (void)
 {
