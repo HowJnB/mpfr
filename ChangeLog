@@ -1,4 +1,60 @@
 ------------------------------------------------------------------------
+r11943 | vlefevre | 2017-12-08 14:55:53 +0000 (Fri, 08 Dec 2017) | 1 line
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/doc/FAQ.html
+
+[doc] Updated FAQ.html with a merge of changeset r11942 from the trunk.
+------------------------------------------------------------------------
+r11940 | vlefevre | 2017-12-08 14:33:54 +0000 (Fri, 08 Dec 2017) | 3 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/doc/FAQ.html
+
+[doc] Updated FAQ.html with a merge of changeset r11939 from the trunk
+and a replacement assuming MPFR 4.0.0 has been released (since this is
+a file for the MPFR 4.0.0 release).
+------------------------------------------------------------------------
+r11937 | vlefevre | 2017-12-08 14:15:30 +0000 (Fri, 08 Dec 2017) | 1 line
+Changed paths:
+   M /branches/4.0/NEWS
+
+[NEWS] Added test coverage for MPFR 4.0.0.
+------------------------------------------------------------------------
+r11936 | vlefevre | 2017-12-08 14:05:15 +0000 (Fri, 08 Dec 2017) | 1 line
+Changed paths:
+   M /branches/4.0/VERSION
+   M /branches/4.0/configure.ac
+   M /branches/4.0/doc/mpfr.texi
+   M /branches/4.0/src/mpfr.h
+   M /branches/4.0/src/version.c
+
+Updated version to 4.0.0-rc1.
+------------------------------------------------------------------------
+r11935 | vlefevre | 2017-12-08 14:00:43 +0000 (Fri, 08 Dec 2017) | 6 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/doc/README.dev
+
+[doc/README.dev] "To make a release":
+  * Note that this needs to be done in a branch.
+  * Swapped (1) and (2), in particular because the coverage might be
+    different in -dev versions and it is better to give results closer
+    to the release.
+(merged changeset r11934 from the trunk)
+------------------------------------------------------------------------
+r11932 | vlefevre | 2017-12-08 13:38:16 +0000 (Fri, 08 Dec 2017) | 1 line
+Changed paths:
+   A /branches/4.0 (from /trunk:11931)
+
+Created branch 4.0.
+------------------------------------------------------------------------
+r11931 | vlefevre | 2017-12-08 13:17:51 +0000 (Fri, 08 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/ChangeLog
+
+ChangeLog update with "LC_ALL=en_US.UTF8 TZ=UTC svn log -rHEAD:0 -v".
+------------------------------------------------------------------------
 r11930 | vlefevre | 2017-12-08 13:09:08 +0000 (Fri, 08 Dec 2017) | 2 lines
 Changed paths:
    D /trunk/tests/timings-mpfr.c
