@@ -1,4 +1,18 @@
 ------------------------------------------------------------------------
+r11946 | vlefevre | 2017-12-08 16:17:03 +0000 (Fri, 08 Dec 2017) | 2 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/src/Makefile.am
+
+[src/Makefile.am] Also distribute generic/coverage/mparam.h
+(merged changeset r11945 from the trunk)
+------------------------------------------------------------------------
+r11944 | vlefevre | 2017-12-08 15:01:52 +0000 (Fri, 08 Dec 2017) | 1 line
+Changed paths:
+   M /branches/4.0/ChangeLog
+
+ChangeLog update with "LC_ALL=en_US.UTF8 TZ=UTC svn log -rHEAD:0 -v".
+------------------------------------------------------------------------
 r11943 | vlefevre | 2017-12-08 14:55:53 +0000 (Fri, 08 Dec 2017) | 1 line
 Changed paths:
    M /branches/4.0
