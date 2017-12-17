@@ -210,9 +210,9 @@ To make a release (for the MPFR team):
 
   6) Test the release version on different machines, with --enable-assert
      set to "yes", "no" (default), "none" and "full" respectively, with
-     and without -DXDEBUG in $CFLAGS, with and without gmp internal files
-     (--enable-gmp-internals), with and without GMP built as a shared
-     library, with objdir equal to and different from srcdir (e.g.
+     and without -DMPFR_DISABLE_IEEE_FLOATS in $CFLAGS, with and without gmp
+     internal files (--enable-gmp-internals), with and without GMP built as
+     a shared library, with objdir equal to and different from srcdir (e.g.
      ../mpfr-source/configure after making mpfr-source read-only), with
      and without --enable-logging.
 
@@ -255,16 +255,17 @@ To make a release (for the MPFR team):
      32, mode32 and mode64 (in particular mode32, where long's have
      32 bits and limbs have 64 bits [long long]).
 
-     Test with -DMPFR_TESTS_FPE_DIV -DMPFR_ERRDIVZERO -DXDEBUG in order
+     Test with -DMPFR_TESTS_FPE_DIV -DMPFR_ERRDIVZERO
+     -DMPFR_DISABLE_IEEE_FLOATS in order
      to detect whether tests can fail due to a FP division by 0 (yielding
      either FE_DIVBYZERO, e.g. from 1.0 / 0.0 to generate an infinity, or
      FE_INVALID, e.g. from 0.0 / 0.0 to generate a NaN) on platforms where
      such an operation fails (e.g. trap). On platforms that do not support
      IEEE 754, such an operation yields an undefined behavior.
      If _MPFR_IEEE_FLOATS is defined to 1 (by the configure script), some
-     divisions by 0 are avoided in the MPFR library. The -DXDEBUG option
-     sets _MPFR_IEEE_FLOATS to 0, allowing one to detect more issues, for
-     platforms without IEEE floats.
+     divisions by 0 are avoided in the MPFR library.
+     The -DMPFR_DISABLE_IEEE_FLOATS option sets _MPFR_IEEE_FLOATS to 0,
+     allowing one to detect more issues, for platforms without IEEE floats.
 
      Test with -D_MPFR_PREC_FORMAT=2 when the "int" type is smaller
      than the "long" type.
@@ -425,11 +426,8 @@ Format of long double.
 + HAVE_LDOUBLE_IEEE_QUAD_LITTLE:        IEEE quad, little endian.
 + HAVE_LDOUBLE_MAYBE_DOUBLE_DOUBLE:     Double-double (a.k.a. IBM).
 
-+ DEBUG:                For debugging messages in some functions (currently
-                        not suitable for "make check" because many messages
-                        would be output and it is not possible to disable
-                        these messages once this macro has been defined).
-+ XDEBUG:               Use generic 'double' code instead of IEEE specific one.
++ MPFR_DISABLE_IEEE_FLOATS:
+                        Use generic 'double' code instead of IEEE specific one.
 + MPFR_WANT_ASSERT:     Assertion level. See src/mpfr-impl.h for details.
 + MPFR_EXP_CHECK:       Define if we want to check the exp field.
 
@@ -448,7 +446,8 @@ Format of long double.
                         as double-double (a.k.a. IBM long double).
 
 + MPFR_USE_LOGGING:     Define to enable logging.
-+ MPFR_WANT_DECIMAL_FLOATS: Define to build conversion functions from/to
++ MPFR_WANT_DECIMAL_FLOATS:
+                        Define to build conversion functions from/to
                         decimal floats.
 + MPFR_WANT_FLOAT128:   Define to build conversion functions from/to
                         __float128.
@@ -459,12 +458,14 @@ Format of long double.
                         the GMP build directory (--with-gmp-build).
 
 + MPFR_USE_THREAD_SAFE: Define to build MPFR as thread safe (TLS).
-+ MPFR_USE_C11_THREAD_SAFE: Define to implement TLS in the C11 way.
++ MPFR_USE_C11_THREAD_SAFE:
+                        Define to implement TLS in the C11 way.
 
 + MPFR_HAVE_NORETURN:   Define if the _Noreturn function specifier is
                         supported.
-+ MPFR_HAVE_BUILTIN_UNREACHABLE: Define if the __builtin_unreachable
-                        GCC built-in is supported.
++ MPFR_HAVE_BUILTIN_UNREACHABLE:
+                        Define if the __builtin_unreachable GCC built-in is
+                        supported.
 
 + MPFR_GENERIC_ABI:     Define to disable code that is tied to a specific
                         ABI (e.g. GMP_NUMB_BITS value).
@@ -523,7 +524,8 @@ Environment variables that affect the tests:
 
 + MPFR_CHECK_LARGEMEM:  Define to enable expensive tests.
 
-+ MPFR_CHECK_LIBC_PRINTF: Define to enable comparisons with the printf
++ MPFR_CHECK_LIBC_PRINTF:
+                        Define to enable comparisons with the printf
                         function of the C library. These comparisons are
                         disabled by default as failures could be due to
                         the C library itself on some machines, and they
@@ -531,11 +533,12 @@ Environment variables that affect the tests:
 
 + MPFR_DEBUG_BADCASES:  For debugging (see tests.c, function bad_cases).
 
-+ MPFR_SUSPICIOUS_OVERFLOW: Define to check suspicious overflow in the
-                        generic tests (tgeneric.c). For developers and
-                        testers.
++ MPFR_SUSPICIOUS_OVERFLOW:
+                        Define to check suspicious overflow in the generic
+                        tests (tgeneric.c). For developers and testers.
 
-+ MPFR_TESTS_MEMORY_LIMIT: The memory limit for the tests (default is
++ MPFR_TESTS_MEMORY_LIMIT:
+                        The memory limit for the tests (default is
                         2^22 = 4 MB). Set to 0 for unlimited.
 
 + MPFR_TESTS_TIMEOUT:   When timeout in the tests is enabled, this
@@ -575,7 +578,7 @@ But:
   [...]
   if (l != 0) do_action ();
 
- since mp_limb_t may be "unsigned long long", and some buggy compiler
+since mp_limb_t may be "unsigned long long", and some buggy compiler
 produce illegal codes with the first form.
 
    =====================================================================
@@ -748,9 +751,9 @@ for undefined preprocessing identifier").
 ===========================================================================
 
 If you want to use the logging of MPFR, you need to enable it:
- ./configure --enable-logging
- make clean
- make
+  make distclean
+  ./configure --enable-logging
+  make
 Then link your program with this new build of MPFR.
 
 Warning! The logging code for functions sometimes output an "inexact"

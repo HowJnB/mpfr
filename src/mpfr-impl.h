@@ -581,8 +581,8 @@ __MPFR_DECLSPEC extern const mpfr_t __gmpfr_const_log2_RNDU;
 # endif
 #endif
 
-/* With -DXDEBUG, exercise non IEEE floats */
-#ifdef XDEBUG
+/* With -DMPFR_DISABLE_IEEE_FLOATS, exercise non IEEE floats */
+#ifdef MPFR_DISABLE_IEEE_FLOATS
 # ifdef _MPFR_IEEE_FLOATS
 #  undef _MPFR_IEEE_FLOATS
 # endif
@@ -1396,16 +1396,6 @@ do {                                                                  \
       MPFR_ASSERTD ((s) >= 0 && (s) < GMP_NUMB_BITS);                 \
     }                                                                 \
   while (0)
-
-/* Use it only for debug reasons */
-/*   MPFR_TRACE (operation) : execute operation iff DEBUG flag is set */
-/*   MPFR_DUMP (x) : print x (a mpfr_t) on stdout */
-#ifdef DEBUG
-# define MPFR_TRACE(x) x
-#else
-# define MPFR_TRACE(x) (void) 0
-#endif
-#define MPFR_DUMP(x) ( printf(#x"="), mpfr_dump(x) )
 
 /* Test if X (positive) is a power of 2 */
 #define IS_POW2(X) (((X) & ((X) - 1)) == 0)

@@ -1,6 +1,6 @@
 /* timings-mpfr - program to measure the efficiency of GNU MPFR
 
-Copyright 2001, 2010, 2011 Free Software Foundation, Inc.
+Copyright 2001-2017 Free Software Foundation, Inc.
 Copyright 2001 Norbert Mueller (Univ. Trier, Germany).
 Contributed by the Arenaire and Caramel projects, INRIA.
 
@@ -25,30 +25,15 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
 #include <string.h>
 #include "gmp.h"
 #include "mpfr.h"
-
-#if defined (USG) || defined (__SVR4) || defined (_UNICOS) || defined(HPUX)
 #include <time.h>
 
-int
-cputime ()
+static int
+cputime (void)
 {
   if (CLOCKS_PER_SEC < 100000)
     return clock () * 1000 / CLOCKS_PER_SEC;
   return clock () / (CLOCKS_PER_SEC / 1000);
 }
-#else
-#include <sys/types.h>
-#include <sys/resource.h>
-
-static int
-cputime ()
-{
-  struct rusage rus;
-
-  getrusage (0, &rus);
-  return rus.ru_utime.tv_sec * 1000 + rus.ru_utime.tv_usec / 1000;
-}
-#endif
 
 int
 main (int argc, char *argv[])

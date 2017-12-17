@@ -26,7 +26,7 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
 ])
 
 dnl Add check-news when it checks for more than 15 lines
-AC_INIT([MPFR],[4.0.0-rc1])
+AC_INIT([MPFR],[4.0.0-rc2])
 
 dnl Older Automake versions than 1.13 may still be supported, but no longer
 dnl tested, and many things have changed in 1.13. Moreover the INSTALL file
@@ -427,7 +427,7 @@ dnl     http://www.ncsa.illinois.edu/UserInfo/Resources/Software/Intel/Compilers
 AC_MSG_CHECKING(for ICC)
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #if !defined(__ICC)
-# error "ICC Not Found"
+# error "Not ICC"
 error
 #endif
 ]], [[]])],[
