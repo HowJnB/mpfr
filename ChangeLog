@@ -1,4 +1,297 @@
 ------------------------------------------------------------------------
+r12026 | vlefevre | 2017-12-20 01:57:34 +0000 (Wed, 20 Dec 2017) | 4 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/NEWS
+   M /branches/4.0/doc/FAQ.html
+
+Re-added changes specific to the old 4.0 branch:
+  * doc/FAQ.html: assume MPFR 4.0.0 has been released (since this is
+    a file for the MPFR 4.0.0 release).
+  * NEWS: added test coverage for MPFR 4.0.0.
+------------------------------------------------------------------------
+r12024 | vlefevre | 2017-12-20 01:53:52 +0000 (Wed, 20 Dec 2017) | 4 lines
+Changed paths:
+   R /branches/4.0 (from /trunk:12023)
+
+Replaced the 4.0 branch by a copy of the trunk (in order to keep the
+history of the latest changes of the trunk); this replacement is due
+to a limitation of Subversion where a merge is regarded as a single
+commit, and is OK here since the 4.0 branch is new.
+------------------------------------------------------------------------
+r12023 | vlefevre | 2017-12-20 01:52:21 +0000 (Wed, 20 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/INSTALL
+   M /trunk/VERSION
+   M /trunk/configure.ac
+   M /trunk/doc/mpfr.texi
+   M /trunk/src/mpfr.h
+   M /trunk/src/version.c
+
+Updated version to 4.0.0-rc2 for an attempt to replace the 4.0 branch.
+------------------------------------------------------------------------
+r12022 | vlefevre | 2017-12-20 01:34:49 +0000 (Wed, 20 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/src/fma.c
+
+[src/fma.c] Minor improvements. Added an assert.
+------------------------------------------------------------------------
+r12021 | vlefevre | 2017-12-20 01:17:36 +0000 (Wed, 20 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/src/tanh.c
+
+[src/tanh.c] GNU coding style.
+------------------------------------------------------------------------
+r12020 | vlefevre | 2017-12-20 01:13:09 +0000 (Wed, 20 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/src/mul.c
+
+[src/mul.c] Reindentation.
+------------------------------------------------------------------------
+r12019 | vlefevre | 2017-12-20 01:10:54 +0000 (Wed, 20 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/src/exp2.c
+
+[src/exp2.c] Replaced two MPFR_ASSERTN by MPFR_STAT_STATIC_ASSERT.
+------------------------------------------------------------------------
+r12018 | vlefevre | 2017-12-19 16:30:09 +0000 (Tue, 19 Dec 2017) | 2 lines
+Changed paths:
+   M /trunk/src/exp2.c
+
+[src/exp2.c] Fixed the double rounding problem in an underflow case,
+triggered by the test added in r12017.
+------------------------------------------------------------------------
+r12017 | vlefevre | 2017-12-19 16:13:48 +0000 (Tue, 19 Dec 2017) | 2 lines
+Changed paths:
+   M /trunk/tests/texp2.c
+
+[tests/texp2.c] Added test of underflow in MPFR_RNDN with exact value
+close to 2^(emin-2). Currently fails due to double rounding.
+------------------------------------------------------------------------
+r12016 | vlefevre | 2017-12-19 14:45:00 +0000 (Tue, 19 Dec 2017) | 3 lines
+Changed paths:
+   M /trunk/tests/tdiv.c
+
+[tests/tdiv.c] Added new non-regression test: the was the real cause of
+the ttanh failure in r11993 without the tanh.c fix in this same commit.
+But this mpfr_div was fixed in r12002.
+------------------------------------------------------------------------
+r12015 | vlefevre | 2017-12-19 08:56:43 +0000 (Tue, 19 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/doc/mpfr.texi
+
+[doc/mpfr.texi] Added a comment about a bug/limitation in makeinfo 5.2.
+------------------------------------------------------------------------
+r12014 | vlefevre | 2017-12-19 08:21:55 +0000 (Tue, 19 Dec 2017) | 2 lines
+Changed paths:
+   M /trunk/doc/mpfr.texi
+
+[doc/mpfr.texi] Improved svar macro for nottex, in case it is used
+in the future.
+------------------------------------------------------------------------
+r12013 | vlefevre | 2017-12-19 08:20:18 +0000 (Tue, 19 Dec 2017) | 2 lines
+Changed paths:
+   M /trunk/doc/mpfr.texi
+
+[doc/mpfr.texi] Define svar even for nottex, though it is not used
+(attempt to avoid a failure with makeinfo 5.2).
+------------------------------------------------------------------------
+r12012 | zimmerma | 2017-12-19 06:51:47 +0000 (Tue, 19 Dec 2017) | 3 lines
+Changed paths:
+   M /trunk/src/fma.c
+   M /trunk/tests/tfma.c
+
+[src/fma.c] fixed bug in mpfr_fma
+[tests/tfma.c] added non-regression test
+
+------------------------------------------------------------------------
+r12011 | vlefevre | 2017-12-19 03:38:58 +0000 (Tue, 19 Dec 2017) | 2 lines
+Changed paths:
+   M /trunk/src/exp2.c
+
+[src/exp2.c] Update concerning the underflow/overflow cases.
+Still incomplete.
+------------------------------------------------------------------------
+r12010 | vlefevre | 2017-12-19 02:32:33 +0000 (Tue, 19 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/doc/mpfr.texi
+
+[doc/mpfr.texi] Updated a comment.
+------------------------------------------------------------------------
+r12009 | vlefevre | 2017-12-19 02:29:51 +0000 (Tue, 19 Dec 2017) | 8 lines
+Changed paths:
+   M /trunk/doc/mpfr.texi
+   M /trunk/doc/texinfo.tex
+
+[doc]
+  * texinfo.tex: update to the latest version 2017-12-18.20, which
+    reverts the change done in 2017-12-01.13 attempting to support
+    @var with script font size (e.g. in exponent); but this change
+    didn't work correctly.
+  * mpfr.texi: introduced a @svar macro to handle this case. It
+    currently disables the use of @var, the other workaround being
+    worse.
+------------------------------------------------------------------------
+r12008 | vlefevre | 2017-12-18 17:59:35 +0000 (Mon, 18 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/src/mul.c
+
+Removed trailing whitespace.
+------------------------------------------------------------------------
+r12007 | vlefevre | 2017-12-18 17:05:28 +0000 (Mon, 18 Dec 2017) | 2 lines
+Changed paths:
+   M /trunk/doc/algorithms.tex
+   M /trunk/src/tanh.c
+
+[doc/algorithms.tex,src/tanh.c] Fixed the bound, in particular from
+the recent improvements in the error analysis.
+------------------------------------------------------------------------
+r12006 | zimmerma | 2017-12-18 16:21:36 +0000 (Mon, 18 Dec 2017) | 3 lines
+Changed paths:
+   M /trunk/src/mul.c
+
+[src/mul.c] we should compare the smaller size and not the larger one to
+	    MPFR_MUL_THRESHOLD or MPFR_SQR_THRESHOLD for Mulders' short product
+
+------------------------------------------------------------------------
+r12005 | zimmerma | 2017-12-18 16:17:19 +0000 (Mon, 18 Dec 2017) | 3 lines
+Changed paths:
+   M /trunk/src/mul.c
+   M /trunk/tests/tmul_d.c
+
+[src/mul.c] with Mulders', convert RNDF to RNDZ
+[tests/tmul_d.c] added a non-regression test
+
+------------------------------------------------------------------------
+r12004 | vlefevre | 2017-12-18 16:04:59 +0000 (Mon, 18 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/doc/algorithms.tex
+
+[doc/algorithms.tex] mpfr_tanh: corrected bounds (thanks to Paul).
+------------------------------------------------------------------------
+r12003 | vlefevre | 2017-12-18 15:54:05 +0000 (Mon, 18 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/doc/algorithms.tex
+
+[doc/algorithms.tex] mpfr_tanh: detailed some inequalities.
+------------------------------------------------------------------------
+r12002 | zimmerma | 2017-12-18 15:06:45 +0000 (Mon, 18 Dec 2017) | 4 lines
+Changed paths:
+   M /trunk/src/div.c
+   M /trunk/tests/tdiv.c
+   M /trunk/tests/ttan.c
+
+[src/div.c] fixed bug in mpfr_div2_approx()
+[tests/tdiv.c] added non-regression test
+[tests/ttan.c] added test triggering bug in mpfr_div2_approx()
+
+------------------------------------------------------------------------
+r12001 | vlefevre | 2017-12-18 14:44:33 +0000 (Mon, 18 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/doc/algorithms.tex
+
+[doc/algorithms.tex] mpfr_tanh: resolved both FIXME's.
+------------------------------------------------------------------------
+r12000 | vlefevre | 2017-12-18 13:37:07 +0000 (Mon, 18 Dec 2017) | 4 lines
+Changed paths:
+   M /trunk/doc/algorithms.tex
+
+[doc/algorithms.tex] mpfr_tanh: corrected a part of the error analysis
+(2^k+4 ≤ |theta_4|^(−1/2) was not necessarily true, since theta_4 can
+be very small). As a consequence, the lemma can be simplified/improved
+(first FIXME). Added a second FIXME on a condition that is not checked.
+------------------------------------------------------------------------
+r11999 | vlefevre | 2017-12-18 12:22:26 +0000 (Mon, 18 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/doc/algorithms.tex
+
+[doc/algorithms.tex] mpfr_tanh: missing absolute value; added a \cdot.
+------------------------------------------------------------------------
+r11998 | vlefevre | 2017-12-18 12:15:31 +0000 (Mon, 18 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/src/exp2.c
+   M /trunk/tests/texp2.c
+
+Removed trailing whitespace.
+------------------------------------------------------------------------
+r11997 | vlefevre | 2017-12-18 12:08:36 +0000 (Mon, 18 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/doc/algorithms.tex
+
+[doc/algorithms.tex] Added another \cdot for readability.
+------------------------------------------------------------------------
+r11996 | zimmerma | 2017-12-18 12:01:41 +0000 (Mon, 18 Dec 2017) | 2 lines
+Changed paths:
+   M /trunk/src/exp2.c
+
+[src/exp2.c] added FIXME
+
+------------------------------------------------------------------------
+r11995 | vlefevre | 2017-12-18 11:55:11 +0000 (Mon, 18 Dec 2017) | 7 lines
+Changed paths:
+   M /trunk/doc/algorithms.tex
+
+[doc/algorithms.tex] Minor corrections for hyperbolic tangent function:
+  * "e" had two different meanings (BTW, the constant e should actually
+    be written \mathrm{e} everywhere in the document).
+  * Use \left...\right instead of |...| when it contains an expression
+    starting with \log (the latter was confusing pdflatex, which added
+    a spurious space before \log).
+  * Added some \cdot for better readability.
+------------------------------------------------------------------------
+r11994 | zimmerma | 2017-12-18 11:36:15 +0000 (Mon, 18 Dec 2017) | 3 lines
+Changed paths:
+   M /trunk/src/exp2.c
+   M /trunk/tests/texp2.c
+
+[src/exp2.c] fixed bug near underflow
+[tests/texp2.c] added non-regression test
+
+------------------------------------------------------------------------
+r11993 | zimmerma | 2017-12-18 08:51:06 +0000 (Mon, 18 Dec 2017) | 9 lines
+Changed paths:
+   M /trunk/doc/algorithms.tex
+   M /trunk/src/tanh.c
+   M /trunk/tests/ttanh.c
+
+[tests/ttanh.c] added test for bug in mpfr_tanh
+[doc/algorithms.tex] fixed error analysis for mpfr_tanh
+[src/tanh.c] fixed error analysis
+Note after r12016: Even though mpfr_tanh was incorrect, the failure
+of the test added in ttanh.c was actually *only* due to a bug in the
+mpfr_div code specific to the trunk (fixed in r12002), i.e. this was
+not a non-regression test for the mpfr_tanh bug itself (in particular,
+this test does not introduce a failure in the 3.1 branch, which still
+has the same incorrect mpfr_tanh code but a correct mpfr_div).
+------------------------------------------------------------------------
+r11991 | vlefevre | 2017-12-18 00:04:58 +0000 (Mon, 18 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/INSTALL
+   M /trunk/VERSION
+   M /trunk/configure.ac
+   M /trunk/doc/mpfr.texi
+   M /trunk/src/mpfr.h
+   M /trunk/src/version.c
+
+Updated version to 4.1.0-dev again.
+------------------------------------------------------------------------
+r11989 | vlefevre | 2017-12-17 23:57:39 +0000 (Sun, 17 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/INSTALL
+   M /trunk/VERSION
+   M /trunk/configure.ac
+   M /trunk/doc/mpfr.texi
+   M /trunk/src/mpfr.h
+   M /trunk/src/version.c
+
+Updated version to 4.0.0-rc2 for an attempt to replace the 4.0 branch.
+------------------------------------------------------------------------
+r11988 | vlefevre | 2017-12-17 23:52:26 +0000 (Sun, 17 Dec 2017) | 1 line
+Changed paths:
+   M /trunk/ChangeLog
+
+ChangeLog update with "LC_ALL=en_US.UTF8 TZ=UTC svn log -rHEAD:0 -v".
+------------------------------------------------------------------------
 r11987 | zimmerma | 2017-12-17 16:23:21 +0000 (Sun, 17 Dec 2017) | 2 lines
 Changed paths:
    M /trunk/src/add1sp.c
@@ -7888,7 +8181,7 @@ r10773 | zimmerma | 2016-08-31 08:54:41 +0000 (Wed, 31 Aug 2016) | 2 lines
 Changed paths:
    M /trunk/src/div.c
 
-[src/div.c] fixed error trigerred by previous commit
+[src/div.c] fixed error triggered by previous commit
 
 ------------------------------------------------------------------------
 r10772 | zimmerma | 2016-08-31 08:50:17 +0000 (Wed, 31 Aug 2016) | 3 lines
