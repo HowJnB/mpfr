@@ -1457,6 +1457,30 @@ test_20170105 (void)
   mpfr_clears (x, y, z, t, (mpfr_ptr) 0);
 }
 
+/* The real cause of the mpfr_ttanh failure from the non-regression test
+   added in tests/ttanh.c@11993 was actually due to a bug in mpfr_div, as
+   this can be seen by comparing the logs of the 3.1 branch and the trunk
+   r11992 with MPFR_LOG_ALL=1 MPFR_LOG_PREC=50 on this particular test
+   (this was noticed because adding this test to the 3.1 branch did not
+   yield a failure like in the trunk, though the mpfr_ttanh code did not
+   change until r11993). This was the bug actually fixed in r12002.
+*/
+static void
+test_20171219 (void)
+{
+  mpfr_t x, y, z, t;
+
+  mpfr_inits2 (126, x, y, z, t, (mpfr_ptr) 0);
+  mpfr_set_str_binary (x, "0.111000000000000111100000000000011110000000000001111000000000000111100000000000011110000000000001111000000000000111100000000000E1");
+  /* x = 36347266450315671364380109803814927 / 2^114 */
+  mpfr_add_ui (y, x, 2, MPFR_RNDN);
+  /* y = 77885641318594292392624080437575695 / 2^114 */
+  mpfr_div (z, x, y, MPFR_RNDN);
+  mpfr_set_ui_2exp (t, 3823, -13, MPFR_RNDN);
+  MPFR_ASSERTN (mpfr_equal_p (z, t));
+  mpfr_clears (x, y, z, t, (mpfr_ptr) 0);
+}
+
 #if !defined(MPFR_GENERIC_ABI) && GMP_NUMB_BITS == 64
 /* exercise mpfr_div2_approx */
 static void
@@ -1479,11 +1503,28 @@ test_mpfr_div2_approx (unsigned long n)
 }
 #endif
 
+/* bug found in ttan with GMP_CHECK_RANDOMIZE=1514257254 */
+static void
+bug20171218 (void)
+{
+  mpfr_t s, c;
+  mpfr_init2 (s, 124);
+  mpfr_init2 (c, 124);
+  mpfr_set_str_binary (s, "-0.1110000111100001111000011110000111100001111000011110000111100001111000011110000111100001111000011110000111100001111000011110E0");
+  mpfr_set_str_binary (c, "0.1111000011110000111100001111000011110000111100001111000011110000111100001111000011110000111100001111000011110000111100001111E-1");
+  mpfr_div (c, s, c, MPFR_RNDN);
+  mpfr_set_str_binary (s, "-1.111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+  MPFR_ASSERTN(mpfr_equal_p (c, s));
+  mpfr_clear (s);
+  mpfr_clear (c);
+}
+
 int
 main (int argc, char *argv[])
 {
   tests_start_mpfr ();
 
+  bug20171218 ();
   testall_rndf (9);
   test_20170105 ();
   check_inexact ();
@@ -1509,6 +1550,7 @@ main (int argc, char *argv[])
   test_20151023 ();
   test_20160831 ();
   test_20170104 ();
+  test_20171219 ();
   test_generic (MPFR_PREC_MIN, 800, 50);
   test_bad ();
   test_extreme ();
