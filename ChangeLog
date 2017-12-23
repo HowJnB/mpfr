@@ -1,4 +1,42 @@
 ------------------------------------------------------------------------
+r12050 | vlefevre | 2017-12-23 10:17:50 +0000 (Sat, 23 Dec 2017) | 1 line
+Changed paths:
+   M /branches/4.0/VERSION
+   M /branches/4.0/configure.ac
+   M /branches/4.0/doc/mpfr.texi
+   M /branches/4.0/src/mpfr.h
+   M /branches/4.0/src/version.c
+
+Updated version to 4.0.0.
+------------------------------------------------------------------------
+r12049 | vlefevre | 2017-12-23 10:15:10 +0000 (Sat, 23 Dec 2017) | 1 line
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/src/exp_2.c
+   M /branches/4.0/src/subnormal.c
+   M /branches/4.0/tests/texp.c
+
+Merged changesets r12046-12048 from the trunk (bug fix and test).
+------------------------------------------------------------------------
+r12046 | vlefevre | 2017-12-23 01:39:00 +0000 (Sat, 23 Dec 2017) | 1 line
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/src/hypot.c
+   M /branches/4.0/src/lngamma.c
+   M /branches/4.0/src/sin.c
+   M /branches/4.0/src/subnormal.c
+   M /branches/4.0/tests/thypot.c
+   M /branches/4.0/tests/tj1.c
+   M /branches/4.0/tests/tlngamma.c
+
+Merged changesets r12026-12045 from the trunk (bug fixes and tests).
+------------------------------------------------------------------------
+r12027 | vlefevre | 2017-12-20 01:59:31 +0000 (Wed, 20 Dec 2017) | 1 line
+Changed paths:
+   M /branches/4.0/ChangeLog
+
+ChangeLog update with "LC_ALL=en_US.UTF8 TZ=UTC svn log -rHEAD:0 -v".
+------------------------------------------------------------------------
 r12026 | vlefevre | 2017-12-20 01:57:34 +0000 (Wed, 20 Dec 2017) | 4 lines
 Changed paths:
    M /branches/4.0
