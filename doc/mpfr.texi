@@ -123,8 +123,11 @@ floating-point arithmetic, version @value{VERSION}.
 
 @c  Usage: @GMPabs{x}
 @c  Give either |x| in tex, or abs(x) in info or html.
+@c  The \ensuremath is needed because the OT1 encoding is used, where
+@c  the pipe character corresponds to a wide dash:
+@c    https://tex.stackexchange.com/a/1775/58921
 @tex
-\gdef\GMPabs#1{|#1|}
+\gdef\GMPabs#1{\ensuremath{|#1|}}
 @end tex
 @ifnottex
 @macro GMPabs {X}
@@ -3685,16 +3688,17 @@ at least and be suitably aligned for an array of @code{mp_limb_t} (GMP type,
 @deftypefun void mpfr_custom_init_set (mpfr_t @var{x}, int @var{kind}, mpfr_exp_t @var{exp}, mpfr_prec_t @var{prec}, void *@var{significand})
 Perform a dummy initialization of a @code{mpfr_t} and set it to:
 @itemize
-@item if @code{ABS(kind) == MPFR_NAN_KIND}, @var{x} is set to NaN;
-@item if @code{ABS(kind) == MPFR_INF_KIND}, @var{x} is set to the infinity
-of sign @code{sign(kind)};
-@item if @code{ABS(kind) == MPFR_ZERO_KIND}, @var{x} is set to the zero of
-sign @code{sign(kind)};
-@item if @code{ABS(kind) == MPFR_REGULAR_KIND}, @var{x} is set to a regular
-number: @code{x = sign(kind)*significand*2^exp}.
+@item if @GMPabs{@var{kind}} = @code{MPFR_NAN_KIND}, @var{x} is set to NaN;
+@item if @GMPabs{@var{kind}} = @code{MPFR_INF_KIND}, @var{x} is set to the
+infinity of the same sign as @var{kind};
+@item if @GMPabs{@var{kind}} = @code{MPFR_ZERO_KIND}, @var{x} is set to the
+zero of the same sign as @var{kind};
+@item if @GMPabs{@var{kind}} = @code{MPFR_REGULAR_KIND}, @var{x} is set to
+the regular number whose sign is the one of @var{kind}, and whose exponent
+and significand are given by @var{exp} and @var{significand}.
 @end itemize
-In all cases, it uses @var{significand} directly for further computing
-involving @var{x}. It will not allocate anything.
+In all cases, @var{significand} will be used directly for further computing
+involving @var{x}. This function does not allocate anything.
 A floating-point number initialized with this function cannot be resized using
 @code{mpfr_set_prec} or @code{mpfr_prec_round},
 or cleared using @code{mpfr_clear}!
@@ -3718,8 +3722,10 @@ with @code{mpfr_custom_init_set} is undefined.
 
 @deftypefun mpfr_exp_t mpfr_custom_get_exp (mpfr_t @var{x})
 Return the exponent of @var{x}, assuming that @var{x} is a non-zero ordinary
-number. The return value for NaN, Infinity or zero is unspecified but does not
-produce any trap.
+number and the significand is considered in [1/2,1).
+But if @var{x} is NaN, infinity or zero, contrary to @code{mpfr_get_exp}
+(where the behavior is undefined), the return value is here an unspecified,
+valid value of the @code{mpfr_exp_t} type.
 The behavior of this function for any @code{mpfr_t} not initialized
 with @code{mpfr_custom_init_set} is undefined.
 @end deftypefun
