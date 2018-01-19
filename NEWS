@@ -22,6 +22,7 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
 
 Changes from version 4.0.0 to version 4.0.1:
 - Improved MPFR manual.
+- Fixed a build failure on some platforms when --with-gmp-build is used.
 - Minor bug fixes (see ChangeLog file).
 
 Changes from versions 3.1.* to version 4.0.0:
