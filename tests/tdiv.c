@@ -1005,7 +1005,11 @@ consistency (void)
       MPFR_ASSERTN (!MPFR_IS_NAN (z2));
       if (inex1 != inex2 || mpfr_cmp (z1, z2) != 0)
         {
-          printf ("Consistency error for i = %d\n", i);
+          printf ("Consistency error for i = %d, rnd = %s\n", i,
+                  mpfr_print_rnd_mode (rnd));
+          printf ("inex1=%d inex2=%d\n", inex1, inex2);
+          printf ("z1="); mpfr_dump (z1);
+          printf ("z2="); mpfr_dump (z2);
           exit (1);
         }
     }
@@ -1259,11 +1263,221 @@ test_extreme (void)
   set_emax (emax);
 }
 
+/* This test was written for the new division code for MPFR 4,
+   then merged into the 3.1 branch. */
+static void
+test_mpfr_divsp2 (void)
+{
+  mpfr_t u, v, q;
+
+  /* test to exercise r2 = v1 in mpfr_divsp2 */
+  mpfr_init2 (u, 128);
+  mpfr_init2 (v, 128);
+  mpfr_init2 (q, 83);
+
+  mpfr_set_str (u, "286677858044426991425771529092412636160", 10, MPFR_RNDN);
+  mpfr_set_str (v, "241810647971575979588130185988987264768", 10, MPFR_RNDN);
+  mpfr_div (q, u, v, MPFR_RNDN);
+  mpfr_set_str (u, "5732952910203749289426944", 10, MPFR_RNDN);
+  mpfr_div_2exp (u, u, 82, MPFR_RNDN);
+  MPFR_ASSERTN(mpfr_equal_p (q, u));
+
+  mpfr_clear (u);
+  mpfr_clear (v);
+  mpfr_clear (q);
+}
+
+/* This test was written for the new division code for MPFR 4,
+   then merged into the 3.1 branch. */
+/* Assertion failure in r10769 with --enable-assert --enable-gmp-internals
+   (same failure in tatan on a similar example). */
+static void
+test_20160831 (void)
+{
+  mpfr_t u, v, q;
+
+  mpfr_inits2 (124, u, v, q, (mpfr_ptr) 0);
+
+  mpfr_set_ui (u, 1, MPFR_RNDN);
+  mpfr_set_str (v, "0x40000000000000005", 16, MPFR_RNDN);
+  mpfr_div (q, u, v, MPFR_RNDN);
+  mpfr_set_str (u, "0xfffffffffffffffecp-134", 16, MPFR_RNDN);
+  MPFR_ASSERTN (mpfr_equal_p (q, u));
+
+  mpfr_set_prec (u, 128);
+  mpfr_set_prec (v, 128);
+  mpfr_set_str (u, "186127091671619245460026015088243485690", 10, MPFR_RNDN);
+  mpfr_set_str (v, "205987256581218236405412302590110119580", 10, MPFR_RNDN);
+  mpfr_div (q, u, v, MPFR_RNDN);
+  mpfr_set_str (u, "19217137613667309953639458782352244736", 10, MPFR_RNDN);
+  mpfr_div_2exp (u, u, 124, MPFR_RNDN);
+  MPFR_ASSERTN (mpfr_equal_p (q, u));
+
+  mpfr_clears (u, v, q, (mpfr_ptr) 0);
+}
+
+/* This test was written for the new division code for MPFR 4,
+   then merged into the 3.1 branch. */
+/* With r11138, on a 64-bit machine:
+   div.c:128: MPFR assertion failed: qx >= __gmpfr_emin
+*/
+static void
+test_20170104 (void)
+{
+  mpfr_t u, v, q;
+  mpfr_exp_t emin;
+
+  emin = mpfr_get_emin ();
+  set_emin (-42);
+
+  mpfr_init2 (u, 12);
+  mpfr_init2 (v, 12);
+  mpfr_init2 (q, 11);
+  mpfr_set_str_binary (u, "0.111111111110E-29");
+  mpfr_set_str_binary (v, "0.111111111111E14");
+  mpfr_div (q, u, v, MPFR_RNDN);
+  mpfr_clears (u, v, q, (mpfr_ptr) 0);
+
+  set_emin (emin);
+}
+
+/* This test was written for the new division code for MPFR 4,
+   then merged into the 3.1 branch. */
+/* With r11140, on a 64-bit machine with GMP_CHECK_RANDOMIZE=1484406128:
+   Consistency error for i = 2577
+*/
+static void
+test_20170105 (void)
+{
+  mpfr_t x, y, z, t;
+
+  mpfr_init2 (x, 138);
+  mpfr_init2 (y, 6);
+  mpfr_init2 (z, 128);
+  mpfr_init2 (t, 128);
+  mpfr_set_str_binary (x, "0.100110111001001000101111010010011101111110111111110001110100000001110111010100111010100011101010110000010100000011100100110101101011000000E-6");
+  mpfr_set_str_binary (y, "0.100100E-2");
+  /* up to exponents, x/y is exactly 367625553447399614694201910705139062483,
+     which has 129 bits, thus we are in the round-to-nearest-even case, and since
+     the penultimate bit of x/y is 1, we should round upwards */
+  mpfr_set_str_binary (t, "0.10001010010010010000110110010110111111111100011011101010000000000110101000010001011110011011010000111010000000001100101101101010E-3");
+  mpfr_div (z, x, y, MPFR_RNDN);
+  MPFR_ASSERTN(mpfr_equal_p (z, t));
+  mpfr_clears (x, y, z, t, (mpfr_ptr) 0);
+}
+
+/* This test was written for the new division code for MPFR 4,
+   then merged into the 3.1 branch. */
+/* The real cause of the mpfr_ttanh failure from the non-regression test
+   added in tests/ttanh.c@11993 was actually due to a bug in mpfr_div, as
+   this can be seen by comparing the logs of the 3.1 branch and the trunk
+   r11992 with MPFR_LOG_ALL=1 MPFR_LOG_PREC=50 on this particular test
+   (this was noticed because adding this test to the 3.1 branch did not
+   yield a failure like in the trunk, though the mpfr_ttanh code did not
+   change until r11993). This was the bug actually fixed in r12002.
+*/
+static void
+test_20171219 (void)
+{
+  mpfr_t x, y, z, t;
+
+  mpfr_inits2 (126, x, y, z, t, (mpfr_ptr) 0);
+  mpfr_set_str_binary (x, "0.111000000000000111100000000000011110000000000001111000000000000111100000000000011110000000000001111000000000000111100000000000E1");
+  /* x = 36347266450315671364380109803814927 / 2^114 */
+  mpfr_add_ui (y, x, 2, MPFR_RNDN);
+  /* y = 77885641318594292392624080437575695 / 2^114 */
+  mpfr_div (z, x, y, MPFR_RNDN);
+  mpfr_set_ui_2exp (t, 3823, -13, MPFR_RNDN);
+  MPFR_ASSERTN (mpfr_equal_p (z, t));
+  mpfr_clears (x, y, z, t, (mpfr_ptr) 0);
+}
+
+/* This test was written for the new division code for MPFR 4,
+   then merged into the 3.1 branch. */
+/* bug found in ttan with GMP_CHECK_RANDOMIZE=1514257254 */
+static void
+bug20171218 (void)
+{
+  mpfr_t s, c;
+  mpfr_init2 (s, 124);
+  mpfr_init2 (c, 124);
+  mpfr_set_str_binary (s, "-0.1110000111100001111000011110000111100001111000011110000111100001111000011110000111100001111000011110000111100001111000011110E0");
+  mpfr_set_str_binary (c, "0.1111000011110000111100001111000011110000111100001111000011110000111100001111000011110000111100001111000011110000111100001111E-1");
+  mpfr_div (c, s, c, MPFR_RNDN);
+  mpfr_set_str_binary (s, "-1.111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+  MPFR_ASSERTN(mpfr_equal_p (c, s));
+  mpfr_clear (s);
+  mpfr_clear (c);
+}
+
+/* This test was written for the new division code for MPFR 4,
+   then merged into the 3.1 branch. */
+/* Extended test based on a bug found with flint-arb test suite with a
+   32-bit ABI: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=888459
+   A failure may occur in r12126 with pb=GMP_NUMB_BITS and MPFR_RNDN.
+*/
+static void
+bug20180126 (void)
+{
+  mpfr_t a, b1, b2, c1, c2;
+  int pa, i, j, pc, r, inex1, inex2;
+
+  for (pa = 100; pa < 800; pa += 11)
+    for (i = 1; i <= 4; i++)
+      for (j = -2; j <= 2; j++)
+        {
+          int pb = GMP_NUMB_BITS * i + j;
+
+          if (pb > pa)
+            continue;
+
+          mpfr_inits2 (pa, a, b1, (mpfr_ptr) 0);
+          mpfr_inits2 (pb, b2, (mpfr_ptr) 0);
+
+          mpfr_set_ui (a, 1, MPFR_RNDN);
+          mpfr_nextbelow (a);
+          mpfr_set_ui (b2, 1, MPFR_RNDN);
+          mpfr_nextbelow (b2);
+          inex1 = mpfr_set (b1, b2, MPFR_RNDN);
+          MPFR_ASSERTN (inex1 == 0);
+
+          for (pc = 32; pc <= 320; pc += 32)
+            {
+              mpfr_inits2 (pc, c1, c2, (mpfr_ptr) 0);
+
+              RND_LOOP (r)
+                {
+                  inex1 = mpfr_div (c1, a, b1, (mpfr_rnd_t) r);
+                  inex2 = mpfr_div (c2, a, b2, (mpfr_rnd_t) r);
+
+                  if (! mpfr_equal_p (c1, c2) || ! SAME_SIGN (inex1, inex2))
+                    {
+                      printf ("Error in bug20180126 for "
+                              "pa=%d pb=%d pc=%d %s\n", pa, pb, pc,
+                              mpfr_print_rnd_mode ((mpfr_rnd_t) r));
+                      printf ("inex1 = %d, c1 = ", inex1);
+                      mpfr_dump (c1);
+                      printf ("inex2 = %d, c2 = ", inex2);
+                      mpfr_dump (c2);
+                      exit (1);
+                    }
+                }
+
+              mpfr_clears (c1, c2, (mpfr_ptr) 0);
+            }
+
+          mpfr_clears (a, b1, b2, (mpfr_ptr) 0);
+        }
+}
+
 int
 main (int argc, char *argv[])
 {
   tests_start_mpfr ();
 
+  bug20180126 ();
+  bug20171218 ();
+  test_20170105 ();
   check_inexact ();
   check_hard ();
   check_special ();
@@ -1285,8 +1499,12 @@ main (int argc, char *argv[])
   test_20070603 ();
   test_20070628 ();
   test_20151023 ();
+  test_20160831 ();
+  test_20170104 ();
+  test_20171219 ();
   test_generic (2, 800, 50);
   test_extreme ();
+  test_mpfr_divsp2 ();
 
   tests_end_mpfr ();
   return 0;
