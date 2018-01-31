@@ -353,44 +353,140 @@ corner_cases (int n)
 {
   mpfr_t x, y, t;
   unsigned long u, v;
+  int i, xn;
 
   if (MPFR_LIMB_MAX <= ULONG_MAX)
     {
-      /* we need xn > yn + 1, thus we take xn = 3 and yn = 1 */
-      mpfr_init2 (x, 3 * GMP_NUMB_BITS);
-      mpfr_init2 (y, GMP_NUMB_BITS);
-      mpfr_init2 (t, 2 * GMP_NUMB_BITS);
-      while (n--)
+      /* We need xn > yn + 1, thus we take xn = 3 and yn = 1.
+         Also take xn = 4 to 6 to cover more code. */
+      for (xn = 3; xn < 6; xn++)
         {
-          u = randlimb ();
-          do
-            v = randlimb ();
-          while (v <= MPFR_LIMB_HIGHBIT);
-          mpfr_set_ui (t, v, MPFR_RNDN);
-          mpfr_sub_d (t, t, 0.5, MPFR_RNDN);
-          /* t = v-1/2 */
-          mpfr_mul_ui (x, t, u, MPFR_RNDN);
+          mpfr_init2 (x, xn * GMP_NUMB_BITS);
+          mpfr_init2 (y, GMP_NUMB_BITS);
+          mpfr_init2 (t, 2 * GMP_NUMB_BITS);
+          for (i = 0; i < n; i++)
+            {
+              u = randlimb ();
+              do
+                v = randlimb ();
+              while (v <= MPFR_LIMB_HIGHBIT);
+              mpfr_set_ui (t, v, MPFR_RNDN);
+              mpfr_sub_d (t, t, 0.5, MPFR_RNDN);
+              /* t = v-1/2 */
+              mpfr_mul_ui (x, t, u, MPFR_RNDN);
 
-          /* when x = (v-1/2)*u, x/u should give v-1/2, which should give
-             either v (if v is even) or v-1 (if v is odd) */
-          mpfr_div_ui (y, x, u, MPFR_RNDN);
-          MPFR_ASSERTN(mpfr_cmp_ui (y, v - (v & 1)) == 0);
+              /* when x = (v-1/2)*u, x/u should give v-1/2, which should give
+                 either v (if v is even) or v-1 (if v is odd) */
+              mpfr_div_ui (y, x, u, MPFR_RNDN);
+              MPFR_ASSERTN(mpfr_cmp_ui (y, v - (v & 1)) == 0);
 
-          /* when x = (v-1/2)*u - epsilon, x/u should give v-1 */
-          mpfr_nextbelow (x);
-          mpfr_div_ui (y, x, u, MPFR_RNDN);
-          MPFR_ASSERTN(mpfr_cmp_ui (y, v - 1) == 0);
+              /* when x = (v-1/2)*u - epsilon, x/u should give v-1 */
+              mpfr_nextbelow (x);
+              mpfr_div_ui (y, x, u, MPFR_RNDN);
+              MPFR_ASSERTN(mpfr_cmp_ui (y, v - 1) == 0);
 
-          /* when x = (v-1/2)*u + epsilon, x/u should give v */
-          mpfr_nextabove (x);
-          mpfr_nextabove (x);
-          mpfr_div_ui (y, x, u, MPFR_RNDN);
-          MPFR_ASSERTN(mpfr_cmp_ui (y, v) == 0);
+              /* when x = (v-1/2)*u + epsilon, x/u should give v */
+              mpfr_nextabove (x);
+              mpfr_nextabove (x);
+              mpfr_div_ui (y, x, u, MPFR_RNDN);
+              MPFR_ASSERTN(mpfr_cmp_ui (y, v) == 0);
+            }
+          mpfr_clear (x);
+          mpfr_clear (y);
+          mpfr_clear (t);
         }
-      mpfr_clear (x);
-      mpfr_clear (y);
-      mpfr_clear (t);
     }
+}
+
+static void
+midpoint_exact (void)
+{
+  mpfr_t x, y1, y2;
+  unsigned long j;
+  int i, kx, ky, px, pxmin, py, pymin, r;
+  int inex1, inex2;
+
+  pymin = 1;
+  for (i = 3; i < 32; i += 2)
+    {
+      if ((i & (i-2)) == 1)
+        pymin++;
+      for (j = 1; j != 0; j++)
+        {
+          if (j == 31)
+            j = ULONG_MAX;
+          /* Test of (i*j) / j with various precisions. The target precisions
+             include: large, length(i), and length(i)-1; the latter case
+             corresponds to a midpoint. */
+          mpfr_init2 (x, 5 + sizeof(long) * CHAR_BIT);
+          inex1 = mpfr_set_ui (x, j, MPFR_RNDN);
+          MPFR_ASSERTN (inex1 == 0);
+          inex1 = mpfr_mul_ui (x, x, i, MPFR_RNDN);
+          MPFR_ASSERTN (inex1 == 0);
+          /* x = (i*j) */
+          pxmin = mpfr_min_prec (x);
+          if (pxmin < MPFR_PREC_MIN)
+            pxmin = MPFR_PREC_MIN;
+          for (kx = 0; kx < 8; kx++)
+            {
+              px = pxmin;
+              if (kx != 0)
+                px += randlimb () % (4 * GMP_NUMB_BITS);
+              inex1 = mpfr_prec_round (x, px, MPFR_RNDN);
+              MPFR_ASSERTN (inex1 == 0);
+              for (ky = 0; ky < 8; ky++)
+                {
+                  py = pymin;
+                  if (ky == 0)
+                    py--;
+                  else if (ky > 1)
+                    py += randlimb () % (4 * GMP_NUMB_BITS);
+                  mpfr_inits2 (py, y1, y2, (mpfr_ptr) 0);
+                  RND_LOOP_NO_RNDF (r)
+                    {
+                      inex1 = mpfr_set_ui (y1, i, (mpfr_rnd_t) r);
+                      inex2 = mpfr_div_ui (y2, x, j, (mpfr_rnd_t) r);
+                      if (! mpfr_equal_p (y1, y2) ||
+                          ! SAME_SIGN (inex1, inex2))
+                        {
+                          printf ("Error in midpoint_exact for "
+                                  "i=%d j=%lu px=%d py=%d %s\n", i, j, px, py,
+                                  mpfr_print_rnd_mode ((mpfr_rnd_t) r));
+                          printf ("Expected ");
+                          mpfr_dump (y1);
+                          printf ("with inex = %d\n", inex1);
+                          printf ("Got      ");
+                          mpfr_dump (y2);
+                          printf ("with inex = %d\n", inex2);
+                          exit (1);
+                        }
+                    }
+                  mpfr_clears (y1, y2, (mpfr_ptr) 0);
+                }
+            }
+          mpfr_clear (x);
+        }
+    }
+}
+
+static void
+check_coverage (void)
+{
+#ifdef MPFR_COV_CHECK
+  int i, j;
+  int err = 0;
+
+  for (i = 0; i < numberof (__gmpfr_cov_div_ui_sb); i++)
+    for (j = 0; j < 2; j++)
+      if (!__gmpfr_cov_div_ui_sb[i][j])
+        {
+          printf ("mpfr_div_ui not tested on case %d, sb=%d\n", i, j);
+          err = 1;
+        }
+
+  if (err)
+    exit (1);
+#endif
 }
 
 #define TEST_FUNCTION mpfr_div_ui
@@ -435,7 +531,9 @@ main (int argc, char **argv)
   mpfr_clear (x);
 
   test_generic (MPFR_PREC_MIN, 200, 100);
+  midpoint_exact ();
 
+  check_coverage ();
   tests_end_mpfr ();
   return 0;
 }
