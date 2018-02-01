@@ -1,4 +1,139 @@
 ------------------------------------------------------------------------
+r12179 | vlefevre | 2018-02-01 14:28:02 +0000 (Thu, 01 Feb 2018) | 1 line
+Changed paths:
+   M /branches/4.0/NEWS
+
+[NEWS] Mention "make check-exported-symbols" (experimental).
+------------------------------------------------------------------------
+r12177 | vlefevre | 2018-02-01 14:22:32 +0000 (Thu, 01 Feb 2018) | 1 line
+Changed paths:
+   M /branches/4.0/VERSION
+   M /branches/4.0/configure.ac
+   M /branches/4.0/doc/mpfr.texi
+   M /branches/4.0/src/mpfr.h
+   M /branches/4.0/src/version.c
+
+Updated version to 4.0.1-rc2.
+------------------------------------------------------------------------
+r12176 | vlefevre | 2018-02-01 14:21:13 +0000 (Thu, 01 Feb 2018) | 1 line
+Changed paths:
+   M /branches/4.0/doc/mpfr.texi
+
+[doc/mpfr.texi] Updated the month.
+------------------------------------------------------------------------
+r12175 | vlefevre | 2018-02-01 13:47:27 +0000 (Thu, 01 Feb 2018) | 1 line
+Changed paths:
+   M /branches/4.0/NEWS
+
+[NEWS] Mention the mpfr_div_ui bug.
+------------------------------------------------------------------------
+r12170 | vlefevre | 2018-01-31 16:21:15 +0000 (Wed, 31 Jan 2018) | 3 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/src/div_ui.c
+   M /branches/4.0/src/mpfr-impl.h
+   M /branches/4.0/tests/tdiv_ui.c
+
+Added value coverage for tdiv_ui (combinations of rb and sb in the
+different cases of the mpfr_div_ui code) and other tests.
+(merged changesets r12164-12169 from the trunk)
+------------------------------------------------------------------------
+r12164 | vlefevre | 2018-01-31 09:57:51 +0000 (Wed, 31 Jan 2018) | 5 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/src/div_ui.c
+   M /branches/4.0/tests/tdiv.c
+   M /branches/4.0/tests/tdiv_ui.c
+   M /branches/4.0/tools/mpfrlint
+
+[src/div_ui.c] Major rewrite to fix a mpfr_div_ui bug.
+[tests/tdiv.c] Updated comment for bug20180126.
+[tests/tdiv_ui.c] Added tests triggering the bug just fixed.
+[tools/mpfrlint] Improved a regexp (avoiding false positives).
+(merged the remaining changesets starting at r12123 from the trunk)
+------------------------------------------------------------------------
+r12138 | vlefevre | 2018-01-27 03:52:35 +0000 (Sat, 27 Jan 2018) | 2 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests/tdiv.c
+
+[tests/tdiv.c] mpfr_div bug bug20180126: also test negative values.
+(merged changeset r12137 from the trunk)
+------------------------------------------------------------------------
+r12135 | vlefevre | 2018-01-27 03:21:15 +0000 (Sat, 27 Jan 2018) | 2 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests/tdiv.c
+
+[tests/tdiv.c] mpfr_div bug bug20180126 was introduced by r9086.
+(merged changeset r12134 from the trunk)
+------------------------------------------------------------------------
+r12133 | vlefevre | 2018-01-26 17:04:38 +0000 (Fri, 26 Jan 2018) | 2 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests/tdiv.c
+
+[tests/tdiv.c] Completed r12128 test with new comments and an assert.
+(merged changeset r12132 from the trunk)
+------------------------------------------------------------------------
+r12130 | vlefevre | 2018-01-26 15:29:25 +0000 (Fri, 26 Jan 2018) | 1 line
+Changed paths:
+   M /branches/4.0/VERSION
+   M /branches/4.0/configure.ac
+   M /branches/4.0/doc/mpfr.texi
+   M /branches/4.0/src/mpfr.h
+   M /branches/4.0/src/version.c
+
+Updated version to 4.0.1-dev.
+------------------------------------------------------------------------
+r12129 | vlefevre | 2018-01-26 15:28:39 +0000 (Fri, 26 Jan 2018) | 2 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests/tdiv.c
+
+[tests/tdiv.c] Added test case for a mpfr_div bug of MPFR 4.
+(merged changeset r12128 from the trunk)
+------------------------------------------------------------------------
+r12127 | vlefevre | 2018-01-25 15:19:15 +0000 (Thu, 25 Jan 2018) | 2 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/doc/README.dev
+
+[doc/README.dev] Added information about symbol checking.
+(merged changeset r12126 from the trunk)
+------------------------------------------------------------------------
+r12125 | vlefevre | 2018-01-25 14:46:21 +0000 (Thu, 25 Jan 2018) | 8 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/Makefile.am
+   M /branches/4.0/doc/README.dev
+   M /branches/4.0/src/Makefile.am
+
+* Added check-exported-symbols make rule to check that MPFR does not
+  define symbols with a GMP reserved prefix.
+* For the check-gmp-symbols and check-exported-symbols make rules, if
+  the library is not $(top_builddir)/src/.libs/libmpfr.so, these rules
+  do nothing instead of potentially failing.
+* doc/README.dev, "To make a release": mention "make check-gmp-symbols"
+  and "make check-exported-symbols".
+(merged changesets r12111-12114 from the trunk)
+------------------------------------------------------------------------
+r12123 | vlefevre | 2018-01-23 09:41:27 +0000 (Tue, 23 Jan 2018) | 4 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests/tests.c
+
+[tests/tests.c] Mention a libtool 2.4.6 bug concerning Solaris, yielding
+potential failures if a compatible MPFR version is already installed:
+this MPFR library is tested instead of the one that has just been built.
+(merged changeset r12122 from the trunk)
+------------------------------------------------------------------------
+r12121 | vlefevre | 2018-01-22 13:58:27 +0000 (Mon, 22 Jan 2018) | 1 line
+Changed paths:
+   M /branches/4.0/ChangeLog
+
+ChangeLog update with "TZ=UTC svn log -rHEAD:0 -v" (in UTF-8 locales).
+------------------------------------------------------------------------
 r12120 | vlefevre | 2018-01-22 13:56:18 +0000 (Mon, 22 Jan 2018) | 1 line
 Changed paths:
    M /branches/4.0/src/Makefile.am
