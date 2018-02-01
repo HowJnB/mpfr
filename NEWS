@@ -24,7 +24,10 @@ Changes from version 4.0.0 to version 4.0.1:
 - Improved MPFR manual.
 - Improved __GMP_CC and __GMP_CFLAGS retrieval (in particular for MS Windows).
 - Fixed a build failure on some platforms when --with-gmp-build is used.
-- Minor bug fixes (see ChangeLog file).
+- Bug fixes (see ChangeLog file), in particular in mpfr_div_ui, which
+  could yield an incorrectly rounded result to nearest when using
+  different precisions; this bug had been present since the introduction
+  of mpfr_div_ui, and in MPFR 4.0.0, it was affecting mpfr_div too.
 
 Changes from versions 3.1.* to version 4.0.0:
 - The "dinde aux marrons" release.
