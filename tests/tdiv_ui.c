@@ -375,17 +375,17 @@ corner_cases (int n)
               /* t = v-1/2 */
               mpfr_mul_ui (x, t, u, MPFR_RNDN);
 
-              /* when x = (v-1/2)*u, x/u should give v-1/2, which should give
-                 either v (if v is even) or v-1 (if v is odd) */
+              /* when x = (v-1/2)*u, x/u should give v-1/2, which should
+                 round to either v (if v is even) or v-1 (if v is odd) */
               mpfr_div_ui (y, x, u, MPFR_RNDN);
               MPFR_ASSERTN(mpfr_cmp_ui (y, v - (v & 1)) == 0);
 
-              /* when x = (v-1/2)*u - epsilon, x/u should give v-1 */
+              /* when x = (v-1/2)*u - epsilon, x/u should round to v-1 */
               mpfr_nextbelow (x);
               mpfr_div_ui (y, x, u, MPFR_RNDN);
               MPFR_ASSERTN(mpfr_cmp_ui (y, v - 1) == 0);
 
-              /* when x = (v-1/2)*u + epsilon, x/u should give v */
+              /* when x = (v-1/2)*u + epsilon, x/u should round to v */
               mpfr_nextabove (x);
               mpfr_nextabove (x);
               mpfr_div_ui (y, x, u, MPFR_RNDN);
@@ -476,16 +476,21 @@ check_coverage (void)
   int i, j;
   int err = 0;
 
-  for (i = 0; i < numberof (__gmpfr_cov_div_ui_sb); i++)
-    for (j = 0; j < 2; j++)
-      if (!__gmpfr_cov_div_ui_sb[i][j])
-        {
-          printf ("mpfr_div_ui not tested on case %d, sb=%d\n", i, j);
-          err = 1;
-        }
+  if (MPFR_LIMB_MAX <= ULONG_MAX)
+    {
+      for (i = 0; i < numberof (__gmpfr_cov_div_ui_sb); i++)
+        for (j = 0; j < 2; j++)
+          if (!__gmpfr_cov_div_ui_sb[i][j])
+            {
+              printf ("mpfr_div_ui not tested on case %d, sb=%d\n", i, j);
+              err = 1;
+            }
 
-  if (err)
-    exit (1);
+      if (err)
+        exit (1);
+    }
+  else /* e.g. mips64 with the n32 ABI */
+    printf ("Warning! Value coverage disabled (mp_limb_t > unsigned long).\n");
 #endif
 }
 
