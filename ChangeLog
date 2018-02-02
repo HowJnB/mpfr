@@ -1,4 +1,79 @@
 ------------------------------------------------------------------------
+r12191 | vlefevre | 2018-02-02 12:32:02 +0000 (Fri, 02 Feb 2018) | 6 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests/terandom.c
+   M /branches/4.0/tests/terandom_chisq.c
+   M /branches/4.0/tests/tgrandom.c
+   M /branches/4.0/tests/tnrandom.c
+   M /branches/4.0/tests/tnrandom_chisq.c
+   M /branches/4.0/tests/trandom.c
+   M /branches/4.0/tests/trandom_deviate.c
+   M /branches/4.0/tests/tset_ld.c
+   M /branches/4.0/tests/tsub_d.c
+   M /branches/4.0/tests/turandom.c
+
+[tests]
+  * Replaced calloc + free by tests_allocate + tests_free as usual.
+  * Replaced some fprintf with stderr by printf.
+  * Do bitwise operations in unsigned arithmetic.
+  * Formatting.
+(merged changesets r12188-12190 from the trunk)
+------------------------------------------------------------------------
+r12187 | vlefevre | 2018-02-02 10:57:17 +0000 (Fri, 02 Feb 2018) | 16 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests/tests.c
+   M /branches/4.0/tests/tremquo.c
+   M /branches/4.0/tests/tset_float128.c
+   M /branches/4.0/tests/tset_ld.c
+
+[tests] Fixed the cases where tests_start_mpfr was called too late,
+i.e. after potential output (to stdout).
+  * tremquo.c: moved the call to tests_start_mpfr to the beginning.
+  * tset_float128.c, tset_ld.c: removed the optional, obsolete code
+    setting the FPU control word; MPFR_FPU_PREC can be used instead
+    (see tests.c).
+
+[tests/tests.c] Make stderr unbuffered again.
+Note for the history: both stdout and stderr were made unbuffered in
+r2361, then all stderr were changed to stdout (and the corresponding
+setbuf on stderr removed) in r2449 for consistency, but stderr was
+used later for specific cases (e.g. memory allocation errors or when
+stdout is already used for something else), and it is also used for
+assertion failures. Thus the setbuf on stderr is still needed.
+
+(merged changesets r12185-12186 from the trunk)
+------------------------------------------------------------------------
+r12184 | vlefevre | 2018-02-02 10:14:04 +0000 (Fri, 02 Feb 2018) | 3 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests/tabort_defalloc1.c
+   M /branches/4.0/tests/tabort_defalloc2.c
+   M /branches/4.0/tests/tabort_prec_max.c
+
+Reverse-merged r12182 since tests_start_mpfr disables stdout buffering,
+so that the fflush() are unnecessary.
+(merged changeset r12183 from the trunk)
+------------------------------------------------------------------------
+r12182 | vlefevre | 2018-02-02 09:55:12 +0000 (Fri, 02 Feb 2018) | 4 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests/tabort_defalloc1.c
+   M /branches/4.0/tests/tabort_defalloc2.c
+   M /branches/4.0/tests/tabort_prec_max.c
+
+[tests/tabort_*.c] Flush stdout after a printf(), as an abort() is
+expected. This is needed on platforms where abort() does not flush
+the stdio streams, such as with the GNU C Library (glibc) 2.27.
+(merged changeset r12181 from the trunk)
+------------------------------------------------------------------------
+r12180 | vlefevre | 2018-02-01 14:31:06 +0000 (Thu, 01 Feb 2018) | 1 line
+Changed paths:
+   M /branches/4.0/ChangeLog
+
+ChangeLog update with "TZ=UTC svn log -rHEAD:0 -v" (in UTF-8 locales).
+------------------------------------------------------------------------
 r12179 | vlefevre | 2018-02-01 14:28:02 +0000 (Thu, 01 Feb 2018) | 1 line
 Changed paths:
    M /branches/4.0/NEWS
