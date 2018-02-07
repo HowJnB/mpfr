@@ -20,6 +20,9 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
 
 ##############################################################################
 
+Changes from version 4.0.1 to version 4.0.2:
+- Corrected minimal GMP version in the INSTALL file and the MPFR manual.
+
 Changes from version 4.0.0 to version 4.0.1:
 - Improved MPFR manual.
 - Improved __GMP_CC and __GMP_CFLAGS retrieval (in particular for MS Windows).
