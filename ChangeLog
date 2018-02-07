@@ -1,4 +1,40 @@
 ------------------------------------------------------------------------
+r12200 | vlefevre | 2018-02-07 12:50:31 +0000 (Wed, 07 Feb 2018) | 1 line
+Changed paths:
+   M /branches/4.0/VERSION
+   M /branches/4.0/configure.ac
+   M /branches/4.0/doc/mpfr.texi
+   M /branches/4.0/src/mpfr.h
+   M /branches/4.0/src/version.c
+
+Updated version to 4.0.1.
+------------------------------------------------------------------------
+r12199 | vlefevre | 2018-02-07 12:02:41 +0000 (Wed, 07 Feb 2018) | 3 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/doc/README.dev
+   M /branches/4.0/tools/announce-text
+
+[doc/README.dev] "To make a release": moved a sentence.
+[tools/announce-text] For releases, check the VERSION file of the tag.
+(merged changesets r12197-12198 from the trunk)
+------------------------------------------------------------------------
+r12195 | vlefevre | 2018-02-02 13:17:33 +0000 (Fri, 02 Feb 2018) | 4 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests/tdiv_ui.c
+
+[tests/tdiv_ui.c] Forcibly disable value coverage checking if
+mp_limb_t > unsigned long (e.g. on mips64 with the n32 ABI).
+Corrected comments.
+(merged changesets r12193-12194 from the trunk)
+------------------------------------------------------------------------
+r12192 | vlefevre | 2018-02-02 12:34:56 +0000 (Fri, 02 Feb 2018) | 1 line
+Changed paths:
+   M /branches/4.0/ChangeLog
+
+ChangeLog update with "TZ=UTC svn log -rHEAD:0 -v" (in UTF-8 locales).
+------------------------------------------------------------------------
 r12191 | vlefevre | 2018-02-02 12:32:02 +0000 (Fri, 02 Feb 2018) | 6 lines
 Changed paths:
    M /branches/4.0
