@@ -972,6 +972,46 @@ bug20180215 (void)
     }
 }
 
+static void
+bug20180216 (void)
+{
+  mpfr_t x, y, z1, z2;
+  int r, p, d, inex;
+
+  for (p = 3; p <= 3 + 4 * GMP_NUMB_BITS; p++)
+    {
+      mpfr_inits2 (p, x, y, z1, z2, (mpfr_ptr) 0);
+      for (d = 1; d <= p-2; d++)
+        {
+          inex = mpfr_set_ui_2exp (z1, 1, d, MPFR_RNDN);  /* z1 = 2^d */
+          MPFR_ASSERTN (inex == 0);
+          inex = mpfr_add_ui (x, z1, 1, MPFR_RNDN);
+          MPFR_ASSERTN (inex == 0);
+          mpfr_nextabove (x);  /* x = 2^d + 1 + epsilon */
+          inex = mpfr_sub (y, x, z1, MPFR_RNDN);  /* y = 1 + epsilon */
+          MPFR_ASSERTN (inex == 0);
+          inex = mpfr_add (z2, y, z1, MPFR_RNDN);
+          MPFR_ASSERTN (inex == 0);
+          MPFR_ASSERTN (mpfr_equal_p (z2, x));  /* consistency check */
+          RND_LOOP (r)
+            {
+              inex = test_sub (z2, x, y, (mpfr_rnd_t) r);
+              if (! mpfr_equal_p (z1, z2) || inex != 0)
+                {
+                  printf ("Error in bug20180216 with p=%d, d=%d, %s\n",
+                          p, d, mpfr_print_rnd_mode ((mpfr_rnd_t) r));
+                  printf ("expected "); mpfr_dump (z1);
+                  printf ("  with inex = 0\n");
+                  printf ("got      "); mpfr_dump (z2);
+                  printf ("  with inex = %d\n", inex);
+                  exit (1);
+                }
+            }
+        }
+      mpfr_clears (x, y, z1, z2, (mpfr_ptr) 0);
+    }
+}
+
 #define TEST_FUNCTION test_sub
 #define TWO_ARGS
 #define RAND_FUNCTION(x) mpfr_random2(x, MPFR_LIMB_SIZE (x), randlimb () % 100, RANDS)
@@ -995,6 +1035,7 @@ main (void)
   check_max_almosteven ();
   bug_ddefour ();
   bug20180215 ();
+  bug20180216 ();
   for (p=2; p<200; p++)
     for (i=0; i<50; i++)
       check_two_sum (p);
