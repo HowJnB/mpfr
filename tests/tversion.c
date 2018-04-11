@@ -326,6 +326,16 @@ main (void)
 
   /**************************** ABI information ****************************/
 
+  printf ("[tversion] sizeof(long) = %ld"
+#if defined(_MPFR_H_HAVE_INTMAX_T)
+          ", sizeof(intmax_t) = %ld"
+#endif
+          "\n", (long) sizeof(long)
+#if defined(_MPFR_H_HAVE_INTMAX_T)
+          , (long) sizeof(intmax_t)
+#endif
+          );
+
   if (mp_bits_per_limb != GMP_NUMB_BITS)
     {
       printf ("ERROR! mp_bits_per_limb != GMP_NUMB_BITS (%ld vs %ld)\n",
@@ -368,6 +378,14 @@ main (void)
 
   printf ("[tversion] Max exponent" RANGE,
           (mpfr_eexp_t) MPFR_EMIN_MIN, (mpfr_eexp_t) MPFR_EMAX_MAX);
+
+  printf ("[tversion] Generic ABI code: "
+#if defined(MPFR_GENERIC_ABI)
+          "yes"
+#else
+          "no"
+#endif
+          "\n");
 
   /************************** Runtime information **************************/
 
