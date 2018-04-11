@@ -101,10 +101,8 @@ underflow (mpfr_exp_t e)
                         printf ("MPFR_EMIN_MIN");
                       else if (e == emin)
                         printf ("default emin");
-                      else if (e >= LONG_MIN)
-                        printf ("%ld", (long) e);
                       else
-                        printf ("<LONG_MIN");
+                        printf ("%" MPFR_EXP_FSPEC "d", (mpfr_eexp_t) e);
                       printf (") with mpfr_%s,\nx = %d/16, prec = %d, k = %d,"
                               " %s\n", div == 0 ? "mul_2si" : div == 1 ?
                               "div_2si" : "div_2ui", s * i, prec, k,
@@ -167,10 +165,8 @@ large (mpfr_exp_t e)
         printf ("MPFR_EMAX_MAX");
       else if (e == emax)
         printf ("default emax");
-      else if (e <= LONG_MAX)
-        printf ("%ld", (long) e);
       else
-        printf (">LONG_MAX");
+        printf ("%" MPFR_EXP_FSPEC "d", (mpfr_eexp_t) e);
       printf (") for mpfr_mul_2si\n");
       printf ("Expected inex > 0, flags = %u,\n         y = ",
               (unsigned int) MPFR_FLAGS_INEXACT);
@@ -192,10 +188,8 @@ large (mpfr_exp_t e)
         printf ("MPFR_EMAX_MAX");
       else if (e == emax)
         printf ("default emax");
-      else if (e <= LONG_MAX)
-        printf ("%ld", (long) e);
       else
-        printf (">LONG_MAX");
+        printf ("%" MPFR_EXP_FSPEC "d", (mpfr_eexp_t) e);
       printf (") for mpfr_div_2si\n");
       printf ("Expected inex > 0, flags = %u,\n         y = ",
               (unsigned int) MPFR_FLAGS_INEXACT);
@@ -217,10 +211,8 @@ large (mpfr_exp_t e)
         printf ("MPFR_EMAX_MAX");
       else if (e == emax)
         printf ("default emax");
-      else if (e <= LONG_MAX)
-        printf ("%ld", (long) e);
       else
-        printf (">LONG_MAX");
+        printf ("%" MPFR_EXP_FSPEC "d", (mpfr_eexp_t) e);
       printf (") for mpfr_div_2ui\n");
       printf ("Expected inex > 0, flags = %u,\n         y = ",
               (unsigned int) MPFR_FLAGS_INEXACT);
@@ -238,10 +230,24 @@ large (mpfr_exp_t e)
 static void
 large0 (void)
 {
-  large (256);
-  if (mpfr_get_emax () != MPFR_EMAX_MAX)
-    large (mpfr_get_emax ());
-  large (MPFR_EMAX_MAX);
+  mpfr_exp_t emin;
+
+  emin = mpfr_get_emin ();
+
+  while (1)
+    {
+      large (256);
+      if (mpfr_get_emax () != MPFR_EMAX_MAX)
+        large (mpfr_get_emax ());
+      large (MPFR_EMAX_MAX);
+      if (mpfr_get_emin () == MPFR_EMIN_MIN)
+        break;
+      /* Redo the test with __gmpfr_emin set to MPFR_EMIN_MIN, which can
+         be useful to trigger integer overflows as in div_2ui.c r12272. */
+      set_emin (MPFR_EMIN_MIN);
+    }
+
+  set_emin (emin);
 }
 
 /* Cases where the function overflows on n = 0 when rounding is like
