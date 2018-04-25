@@ -452,7 +452,7 @@ mpfr_cmp_q (mpfr_srcptr x, mpq_srcptr q)
   mpfr_prec_t p;
   MPFR_SAVE_EXPO_DECL (expo);
 
-  if (MPFR_UNLIKELY (mpq_denref (q) == 0))
+  if (MPFR_UNLIKELY (mpz_sgn (mpq_denref (q)) == 0))
     {
       /* q is an infinity or NaN */
       mpfr_init2 (t, 2);
