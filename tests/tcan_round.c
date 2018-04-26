@@ -88,7 +88,52 @@ check_round_p (void)
                                MPFR_RNDN, MPFR_RNDZ, p);
       if (r1 != r2)
         {
-          printf ("mpfr_round_p(%d) != mpfr_can_round(%d)!\n"
+          printf ("mpfr_round_p(%d) != mpfr_can_round(%d,RNDZ)!\n"
+                  "bn = %ld, err0 = %ld, prec = %lu\nbp = ",
+                  r1, r2, n, (long) err, (unsigned long) p);
+#ifndef MPFR_USE_MINI_GMP
+          gmp_printf ("%NX\n", buf, n);
+#endif
+          exit (1);
+        }
+      /* Same with RNDF: with rnd1=RNDN, rnd2=RNDF is converted to RNDN. */
+      r1 = mpfr_can_round_raw (buf, n, MPFR_SIGN_POS, err,
+                               MPFR_RNDN, MPFR_RNDN, p);
+      r2 = mpfr_can_round_raw (buf, n, MPFR_SIGN_POS, err,
+                               MPFR_RNDN, MPFR_RNDF, p);
+      if (r1 != r2)
+        {
+          printf ("mpfr_can_round(%d,RNDN) != mpfr_can_round(%d,RNDF)!\n"
+                  "bn = %ld, err0 = %ld, prec = %lu\nbp = ",
+                  r1, r2, n, (long) err, (unsigned long) p);
+#ifndef MPFR_USE_MINI_GMP
+          gmp_printf ("%NX\n", buf, n);
+#endif
+          exit (1);
+        }
+      /* Same with RNDF: with rnd1=RNDZ, rnd2=RNDF is converted to RNDA. */
+      r1 = mpfr_can_round_raw (buf, n, MPFR_SIGN_POS, err,
+                               MPFR_RNDZ, MPFR_RNDA, p);
+      r2 = mpfr_can_round_raw (buf, n, MPFR_SIGN_POS, err,
+                               MPFR_RNDZ, MPFR_RNDF, p);
+      if (r1 != r2)
+        {
+          printf ("mpfr_can_round(%d,RNDA) != mpfr_can_round(%d,RNDF)!\n"
+                  "bn = %ld, err0 = %ld, prec = %lu\nbp = ",
+                  r1, r2, n, (long) err, (unsigned long) p);
+#ifndef MPFR_USE_MINI_GMP
+          gmp_printf ("%NX\n", buf, n);
+#endif
+          exit (1);
+        }
+      /* Same with RNDF: with rnd1=RNDA, rnd2=RNDF is converted to RNDZ. */
+      r1 = mpfr_can_round_raw (buf, n, MPFR_SIGN_POS, err,
+                               MPFR_RNDA, MPFR_RNDZ, p);
+      r2 = mpfr_can_round_raw (buf, n, MPFR_SIGN_POS, err,
+                               MPFR_RNDA, MPFR_RNDF, p);
+      if (r1 != r2)
+        {
+          printf ("mpfr_can_round(%d,RNDZ) != mpfr_can_round(%d,RNDF)!\n"
                   "bn = %ld, err0 = %ld, prec = %lu\nbp = ",
                   r1, r2, n, (long) err, (unsigned long) p);
 #ifndef MPFR_USE_MINI_GMP
@@ -231,6 +276,36 @@ check_can_round (void)
   mpfr_clears (x, xinf, xsup, yinf, ysup, (mpfr_ptr) 0);
 }
 
+/* test of RNDNA (nearest with ties to away) */
+static void
+test_rndna (void)
+{
+  mpfr_t x;
+  int inex;
+
+  mpfr_init2 (x, 10);
+  mpfr_set_str_binary (x, "1111111101"); /* 1021 */
+  inex = mpfr_prec_round (x, 9, MPFR_RNDNA);
+  MPFR_ASSERTN(inex > 0);
+  MPFR_ASSERTN(mpfr_cmp_ui (x, 1022) == 0);
+  mpfr_set_prec (x, 10);
+  mpfr_set_str_binary (x, "1111111101"); /* 1021 */
+  inex = mpfr_prec_round (x, 9, MPFR_RNDN);
+  MPFR_ASSERTN(inex < 0);
+  MPFR_ASSERTN(mpfr_cmp_ui (x, 1020) == 0);
+  mpfr_set_prec (x, 10);
+  mpfr_set_str_binary (x, "1111111011"); /* 1019 */
+  inex = mpfr_prec_round (x, 9, MPFR_RNDNA);
+  MPFR_ASSERTN(inex > 0);
+  MPFR_ASSERTN(mpfr_cmp_ui (x, 1020) == 0);
+  mpfr_set_prec (x, 10);
+  mpfr_set_str_binary (x, "1111111011"); /* 1019 */
+  inex = mpfr_prec_round (x, 9, MPFR_RNDN);
+  MPFR_ASSERTN(inex > 0);
+  MPFR_ASSERTN(mpfr_cmp_ui (x, 1020) == 0);
+  mpfr_clear (x);
+}
+
 int
 main (void)
 {
@@ -241,6 +316,7 @@ main (void)
 
   tests_start_mpfr ();
 
+  test_rndna ();
   test_simple ();
 
   /* checks that rounds to nearest sets the last
