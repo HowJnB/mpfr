@@ -635,9 +635,13 @@ fi
 dnl Check if __float128 is available. We also require the compiler
 dnl to support C99 constants (this prevents the __float128 support
 dnl with GCC's -std=c90, but who cares?).
+dnl Note: We use AC_LINK_IFELSE instead of AC_COMPILE_IFELSE since an
+dnl error may occur only at link time, such as under NetBSD:
+dnl   https://mail-index.netbsd.org/pkgsrc-users/2018/02/02/msg026220.html
+dnl   https://mail-index.netbsd.org/pkgsrc-users/2018/02/05/msg026238.html
 if test "$enable_float128" != no; then
    AC_MSG_CHECKING(if compiler knows __float128 with C99 constants)
-   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[__float128 x = 0x1.fp+16383q;]])],
+   AC_LINK_IFELSE([AC_LANG_PROGRAM([[__float128 x = 0x1.fp+16383q;]])],
       [AC_MSG_RESULT(yes)
        AC_DEFINE([MPFR_WANT_FLOAT128],1,[Build float128 functions])],
       [AC_MSG_RESULT(no)
