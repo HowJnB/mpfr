@@ -259,6 +259,8 @@ specinfo_is_valid (struct printf_spec spec)
     }
 }
 
+/* Note: additional flags should be added to the MPFR_PREC_ARG code
+   for gmp_asprintf (when supported). */
 static const char *
 parse_flags (const char *format, struct printf_spec *specinfo)
 {
@@ -2220,7 +2222,7 @@ mpfr_vasnprintf_aux (char **ptr, char *Buf, size_t size, const char *fmt,
         /* output mpfr_prec_t variable */
         {
           char *s;
-          char format[MPFR_PREC_FORMAT_SIZE + 6]; /* see examples below */
+          char format[MPFR_PREC_FORMAT_SIZE + 12]; /* e.g. "%0#+ -'*.*ld\0" */
           size_t length;
           mpfr_prec_t prec;
 
@@ -2232,14 +2234,14 @@ mpfr_vasnprintf_aux (char **ptr, char *Buf, size_t size, const char *fmt,
           start = fmt;
 
           /* construct format string, like "%*.*hd" "%*.*d" or "%*.*ld" */
-          format[0] = '%';
-          format[1] = '*';
-          format[2] = '.';
-          format[3] = '*';
-          format[4] = '\0';
-          strcat (format, MPFR_PREC_FORMAT_TYPE);
-          format[4 + MPFR_PREC_FORMAT_SIZE] = spec.spec;
-          format[5 + MPFR_PREC_FORMAT_SIZE] = '\0';
+          sprintf (format, "%%%s%s%s%s%s%s*.*" MPFR_PREC_FORMAT_TYPE "%c",
+                   spec.pad == '0' ? "0" : "",
+                   spec.alt ? "#" : "",
+                   spec.showsign ? "+" : "",
+                   spec.space ? " " : "",
+                   spec.left ? "-" : "",
+                   spec.group ? "'" : "",
+                   spec.spec);
           length = gmp_asprintf (&s, format, spec.width, spec.prec, prec);
           MPFR_ASSERTN (length >= 0);  /* guaranteed by GMP 6 */
           buffer_cat (&buf, s, length);
