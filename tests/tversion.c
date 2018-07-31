@@ -47,7 +47,8 @@ main (void)
   /*********************** MPFR version and patches ************************/
 
   /* With i586-mingw32msvc-gcc -D__USE_MINGW_ANSI_STDIO and run under Wine,
-     the following line is not output. Let's try to detect the error. */
+     the following line was not output. This is not reproducible. Let's try
+     to detect the error in case this happens again. */
   if (printf ("[tversion] MPFR %s\n", MPFR_VERSION_STRING) < 0)
     {
       perror ("tversion (first printf)");
