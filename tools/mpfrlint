@@ -178,6 +178,16 @@ grep '__gmp[nz]_' $srctests | \
   grep -v __gmpn_rsblsh_n | \
   err-if-output "GMP internals" cat
 
+# __MPFR_DECLSPEC (based on the __MPFR_WITHIN_MPFR status) must be used
+# instead of __GMP_DECLSPEC (based on the __GMP_WITHIN_GMP status, always
+# undefined in MPFR); in particular, the __GMP_DECLSPEC occurrences from
+# GMP's longlong.h file must be changed to __MPFR_DECLSPEC when porting
+# this file to MPFR. See:
+#   https://sympa.inria.fr/sympa/arc/mpfr/2018-08/msg00000.html
+#   https://sympa.inria.fr/sympa/arc/mpfr/2018-08/msg00001.html
+err-if-output --msg="Use __MPFR_DECLSPEC instead." -t "__GMP_DECLSPEC" \
+  grep --exclude=src/mpfr.h __GMP_DECLSPEC $srctests
+
 err-if-output --msg="Use mpfr_limb_ptr and mpfr_limb_srcptr instead." \
   -t "mp_ptr and mp_srcptr" grep -E 'mp_(src)?ptr' $srctests
 
