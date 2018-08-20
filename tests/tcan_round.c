@@ -90,7 +90,7 @@ check_round_p (void)
         {
           printf ("mpfr_round_p(%d) != mpfr_can_round(%d,RNDZ)!\n"
                   "bn = %ld, err0 = %ld, prec = %lu\nbp = ",
-                  r1, r2, n, (long) err, (unsigned long) p);
+                  r1, r2, (long) n, (long) err, (unsigned long) p);
 #ifndef MPFR_USE_MINI_GMP
           gmp_printf ("%NX\n", buf, n);
 #endif
@@ -105,7 +105,7 @@ check_round_p (void)
         {
           printf ("mpfr_can_round(%d,RNDN) != mpfr_can_round(%d,RNDF)!\n"
                   "bn = %ld, err0 = %ld, prec = %lu\nbp = ",
-                  r1, r2, n, (long) err, (unsigned long) p);
+                  r1, r2, (long) n, (long) err, (unsigned long) p);
 #ifndef MPFR_USE_MINI_GMP
           gmp_printf ("%NX\n", buf, n);
 #endif
@@ -120,7 +120,7 @@ check_round_p (void)
         {
           printf ("mpfr_can_round(%d,RNDA) != mpfr_can_round(%d,RNDF)!\n"
                   "bn = %ld, err0 = %ld, prec = %lu\nbp = ",
-                  r1, r2, n, (long) err, (unsigned long) p);
+                  r1, r2, (long) n, (long) err, (unsigned long) p);
 #ifndef MPFR_USE_MINI_GMP
           gmp_printf ("%NX\n", buf, n);
 #endif
@@ -135,7 +135,7 @@ check_round_p (void)
         {
           printf ("mpfr_can_round(%d,RNDZ) != mpfr_can_round(%d,RNDF)!\n"
                   "bn = %ld, err0 = %ld, prec = %lu\nbp = ",
-                  r1, r2, n, (long) err, (unsigned long) p);
+                  r1, r2, (long) n, (long) err, (unsigned long) p);
 #ifndef MPFR_USE_MINI_GMP
           gmp_printf ("%NX\n", buf, n);
 #endif
