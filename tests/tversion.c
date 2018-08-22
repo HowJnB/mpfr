@@ -30,6 +30,17 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
 #include "mpfr-intmax.h"
 #include "mpfr-test.h"
 
+/* Warning about the usage of printf/puts below:
+ *
+ *   - If a macro expansion is used, it must not appear in the first
+ *     argument of printf (format string), as we do not know whether
+ *     the expanded string contains a '%' character.
+ *
+ *   - If a #if preprocessor directive is used in an argument, parentheses
+ *     must be put around the function name, in case this function is also
+ *     implemented as a macro (#if does not work in macro arguments).
+ */
+
 int
 main (void)
 {
@@ -91,7 +102,7 @@ main (void)
      src/mpfr-impl.h; they may have an influcence on how MPFR is compiled. */
 
 #if defined(__STDC__) || defined(__STDC_VERSION__)
-  printf ("[tversion] C standard: __STDC__ = "
+  (puts) ("[tversion] C standard: __STDC__ = "
 #if defined(__STDC__)
           MAKE_STR(__STDC__)
 #else
@@ -103,21 +114,21 @@ main (void)
 #else
           "undef"
 #endif
-          "\n");
+          );
 #endif
 
 #if defined(__GNUC__)
-  printf ("[tversion] __GNUC__ = " MAKE_STR(__GNUC__) ", __GNUC_MINOR__ = "
+  (puts) ("[tversion] __GNUC__ = " MAKE_STR(__GNUC__) ", __GNUC_MINOR__ = "
 #if defined(__GNUC_MINOR__)
           MAKE_STR(__GNUC_MINOR__)
 #else
           "undef"
 #endif
-          "\n");
+          );
 #endif
 
 #if defined(__ICC) || defined(__INTEL_COMPILER)
-  printf ("[tversion] Intel compiler: __ICC = "
+  (puts) ("[tversion] Intel compiler: __ICC = "
 #if defined(__ICC)
           MAKE_STR(__ICC)
 #else
@@ -129,11 +140,11 @@ main (void)
 #else
           "undef"
 #endif
-          "\n");
+          );
 #endif
 
 #if defined(_WIN32) || defined(_MSC_VER)
-  printf ("[tversion] MS Windows: _WIN32 = "
+  (puts) ("[tversion] MS Windows: _WIN32 = "
 #if defined(_WIN32)
           MAKE_STR(_WIN32)
 #else
@@ -145,17 +156,17 @@ main (void)
 #else
           "undef"
 #endif
-          "\n");
+          );
 #endif
 
 #if defined(__GLIBC__)
-  printf ("[tversion] __GLIBC__ = " MAKE_STR(__GLIBC__) ", __GLIBC_MINOR__ = "
+  (puts) ("[tversion] __GLIBC__ = " MAKE_STR(__GLIBC__) ", __GLIBC_MINOR__ = "
 #if defined(__GLIBC_MINOR__)
           MAKE_STR(__GLIBC_MINOR__)
 #else
           "undef"
 #endif
-          "\n");
+          );
 #endif
 
   /******************* GMP version and build information *******************/
@@ -191,7 +202,7 @@ main (void)
      and Unix is LP64).
      MPFR_WIN_THREAD_SAFE_DLL is directly set up from __GMP_LIBGMP_DLL;
      that is why it is output here. */
-  printf ("[tversion] WinDLL: __GMP_LIBGMP_DLL = "
+  (puts) ("[tversion] WinDLL: __GMP_LIBGMP_DLL = "
 #if defined(__GMP_LIBGMP_DLL)
           MAKE_STR(__GMP_LIBGMP_DLL)
 #else
@@ -203,7 +214,7 @@ main (void)
 #else
           "undef"
 #endif
-          "\n");
+          );
 
   /********************* MPFR configuration parameters *********************/
 
@@ -261,15 +272,15 @@ main (void)
           mpfr_buildopt_decimal_p () ? "yes" : "no",
           mpfr_buildopt_gmpinternals_p () ? "yes" : "no");
 
-  printf ("[tversion] Shared cache = "
+  (puts) ("[tversion] Shared cache = "
 #if defined(MPFR_WANT_SHARED_CACHE)
           "yes (" MPFR_THREAD_LOCK_METHOD ")"
 #else
           "no"
 #endif
-          "\n");
+          );
 
-  printf ("[tversion] intmax_t = "
+  (puts) ("[tversion] intmax_t = "
 #if defined(_MPFR_H_HAVE_INTMAX_T)
           "yes"
 #else
@@ -287,9 +298,9 @@ main (void)
 #else
           "no"
 #endif
-          "\n");
+          );
 
-  printf ("[tversion] gmp_printf: hhd = "
+  (puts) ("[tversion] gmp_printf: hhd = "
 #if defined(NPRINTF_HH)
           "no"
 #else
@@ -323,15 +334,15 @@ main (void)
 #else
           "?"
 #endif
-          "\n");
+          );
 
- printf ("[tversion] _mulx_u64 = "
+  (puts) ("[tversion] _mulx_u64 = "
 #if defined(HAVE_MULX_U64)
-         "yes"
+          "yes"
 #else
-         "no"
+          "no"
 #endif
-         "\n");
+          );
 
   if (strcmp (mpfr_buildopt_tune_case (), MPFR_TUNE_CASE) != 0)
     {
@@ -345,15 +356,15 @@ main (void)
 
   /**************************** ABI information ****************************/
 
-  printf ("[tversion] sizeof(long) = %ld"
+  (printf) ("[tversion] sizeof(long) = %ld"
 #if defined(_MPFR_H_HAVE_INTMAX_T)
-          ", sizeof(intmax_t) = %ld"
+            ", sizeof(intmax_t) = %ld"
 #endif
-          "\n", (long) sizeof(long)
+            "\n", (long) sizeof(long)
 #if defined(_MPFR_H_HAVE_INTMAX_T)
-          , (long) sizeof(intmax_t)
+            , (long) sizeof(intmax_t)
 #endif
-          );
+            );
 
   if (mp_bits_per_limb != GMP_NUMB_BITS)
     {
@@ -398,13 +409,13 @@ main (void)
   printf ("[tversion] Max exponent" RANGE,
           (mpfr_eexp_t) MPFR_EMIN_MIN, (mpfr_eexp_t) MPFR_EMAX_MAX);
 
-  printf ("[tversion] Generic ABI code: "
+  (puts) ("[tversion] Generic ABI code: "
 #if defined(MPFR_GENERIC_ABI)
           "yes"
 #else
           "no"
 #endif
-          "\n");
+          );
 
   /************************** Runtime information **************************/
 
