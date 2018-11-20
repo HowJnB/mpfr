@@ -88,7 +88,7 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
  784,784,784,784,783,784,784,784,784,784,784,784,784,784,784,784, \
  784,784,784,784,784,784,784,784,784,784,784,784,784,784,784,783, \
  736,784,784,784,784,784,783,784,784,831,784,832,832,832,832,832 \
-  
+
 #define MPFR_SQRHIGH_TAB  \
  -1,0,0,0,-1,-1,-1,-1,-1,7,7,7,8,9,10,11, \
  11,11,11,11,12,13,13,15,15,15,15,15,17,17,19,19, \
@@ -154,7 +154,7 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
  696,696,695,696,696,696,696,696,695,695,696,695,696,695,696,695, \
  696,695,696,695,696,695,696,695,696,696,696,696,696,695,696,696, \
  695,696,696,696,696,696,696,696,696,696,696,696,696,696,696,696 \
-  
+
 #define MPFR_DIVHIGH_TAB  \
  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, /*0-15*/ \
  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, /*16-31*/ \
@@ -220,7 +220,7 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
  512,512,512,512,512,512,512,512,528,528,512,512,512,512,528,528, /*976-991*/ \
  512,528,526,527,528,511,508,511,512,512,528,527,528,528,510,512, /*992-1007*/ \
  528,544,544,536,536,520,511,536,536,543,512,528,544,512,542,543 /*1008-1023*/ \
-  
+
 #define MPFR_MUL_THRESHOLD 13 /* limbs */
 #define MPFR_SQR_THRESHOLD 16 /* limbs */
 #define MPFR_DIV_THRESHOLD 1 /* limbs */
@@ -231,4 +231,3 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
 #define MPFR_AI_THRESHOLD2 1425
 #define MPFR_AI_THRESHOLD3 19221
 /* Tuneup completed successfully, took 620 seconds */
-

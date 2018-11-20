@@ -220,7 +220,7 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
  528,492,520,516,516,504,525,496,516,520,516,512,520,532,528,516, \
  516,524,512,508,520,528,516,532,532,516,533,516,528,504,528,516, \
  532,576,532,515,516,600,528,517,516,600,600,532,516,600,600,524 \
-  
+
 #define MPFR_MUL_THRESHOLD 16 /* limbs */
 #define MPFR_SQR_THRESHOLD 31 /* limbs */
 #define MPFR_EXP_2_THRESHOLD 469 /* bits */
