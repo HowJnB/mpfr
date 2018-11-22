@@ -2233,6 +2233,7 @@ mpfr_ceil_mul (mpfr_exp_t e, int beta, int i)
    exponent in e.
    x is rounded with direction rnd, m is the number of digits of the mantissa,
    |b| is the given base (2 <= b <= 62 or -36 <= b <= -2).
+   This follows GMP's mpf_get_str specification.
 
    Return value:
    if s=NULL, allocates a string to store the mantissa, with

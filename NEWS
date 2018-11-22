@@ -22,7 +22,9 @@ http://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
 
 Changes from version 4.0.1 to version 4.0.2:
 - Corrected minimal GMP version in the INSTALL file and the MPFR manual.
-- Improved MPFR manual.
+- Improved MPFR manual. In particular, corrected/completed the
+  mpfr_get_str description in order to follow the historical behavior
+  and GMP's mpf_get_str function.
 - Bug fixes (see ChangeLog file).
 
 Changes from version 4.0.0 to version 4.0.1:
