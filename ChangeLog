@@ -1,4 +1,24 @@
 ------------------------------------------------------------------------
+r13381 | vlefevre | 2019-01-07 15:17:51 +0000 (Mon, 07 Jan 2019) | 4 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/COPYING
+   M /branches/4.0/COPYING.LESSER
+
+Updated files:
+  * COPYING from https://www.gnu.org/licenses/gpl-3.0.txt
+  * COPYING.LESSER from https://www.gnu.org/licenses/lgpl-3.0.txt
+These are URL updates and cosmetic changes.
+------------------------------------------------------------------------
+r13379 | vlefevre | 2019-01-07 14:32:20 +0000 (Mon, 07 Jan 2019) | 4 lines
+Changed paths:
+   M /branches/4.0/ChangeLog
+
+ChangeLog update with "LC_ALL=en_US.UTF8 TZ=UTC0 svn log -rHEAD:0 -v".
+Note: For r5400, this changes an incorrect update done via r13373 back
+to the old log message, as the URL in this log message here describes
+a change in one of the files.
+------------------------------------------------------------------------
 r13377 | vlefevre | 2019-01-07 14:06:05 +0000 (Mon, 07 Jan 2019) | 2 lines
 Changed paths:
    M /branches/4.0
