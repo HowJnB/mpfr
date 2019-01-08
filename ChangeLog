@@ -1,4 +1,30 @@
 ------------------------------------------------------------------------
+r13386 | vlefevre | 2019-01-08 13:30:18 +0000 (Tue, 08 Jan 2019) | 3 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests
+   M /branches/4.0/tests/tstrtofr.c
+
+[tests/tstrtofr.c] Updated comment about GCC bug 86554: now fixed in
+the GCC trunk.
+(merged changeset r13385 from the trunk)
+------------------------------------------------------------------------
+r13384 | vlefevre | 2019-01-07 16:11:57 +0000 (Mon, 07 Jan 2019) | 3 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests
+   M /branches/4.0/tests/Makefile.am
+
+[tests/Makefile.am] Replaced "env -u DISPLAY" by "env DISPLAY=''" as
+the -u option is not supported by NetBSD.
+(merged changeset r13383 from the trunk)
+------------------------------------------------------------------------
+r13382 | vlefevre | 2019-01-07 15:22:38 +0000 (Mon, 07 Jan 2019) | 1 line
+Changed paths:
+   M /branches/4.0/ChangeLog
+
+ChangeLog update with "LC_ALL=en_US.UTF8 TZ=UTC0 svn log -rHEAD:0 -v".
+------------------------------------------------------------------------
 r13381 | vlefevre | 2019-01-07 15:17:51 +0000 (Mon, 07 Jan 2019) | 4 lines
 Changed paths:
    M /branches/4.0
