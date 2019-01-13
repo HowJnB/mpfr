@@ -268,12 +268,18 @@ main (void)
       err = 1;
     }
 
-  printf ("[tversion] TLS = %s, float128 = %s, decimal = %s,"
-          " GMP internals = %s\n",
-          mpfr_buildopt_tls_p () ? "yes" : "no",
-          mpfr_buildopt_float128_p () ? "yes" : "no",
-          mpfr_buildopt_decimal_p () ? "yes" : "no",
-          mpfr_buildopt_gmpinternals_p () ? "yes" : "no");
+  (printf) ("[tversion] TLS = %s, float128 = %s, decimal = %s,"
+            " GMP internals = %s\n",
+            mpfr_buildopt_tls_p () ? "yes" : "no",
+            mpfr_buildopt_float128_p () ? "yes" : "no",
+            mpfr_buildopt_decimal_p () ? "yes ("
+#ifdef DPD_FORMAT
+            "DPD"
+#else
+            "BID"
+#endif
+            ")" : "no",
+            mpfr_buildopt_gmpinternals_p () ? "yes" : "no");
 
   (puts) ("[tversion] Shared cache = "
 #if defined(MPFR_WANT_SHARED_CACHE)
