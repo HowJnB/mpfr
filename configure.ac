@@ -167,7 +167,7 @@ AC_ARG_ENABLE(shared-cache,
                           for all MPFR constants.  It usually makes MPFR
                           dependent on PTHREAD [[default=no]]],
    [ case $enableval in
-      yes) mpfr_want_shared_cache=yes
+      yes)
          AC_DEFINE([MPFR_WANT_SHARED_CACHE],1,[Want shared cache]) ;;
       no)  ;;
       *) AC_MSG_ERROR([bad value for --enable-shared-cache: yes or no]) ;;
@@ -203,6 +203,30 @@ AC_ARG_ENABLE(tune-for-coverage,
       yes)  AC_DEFINE([MPFR_TUNE_COVERAGE], 1, [tune for coverage]) ;;
       *)    AC_MSG_ERROR([bad value for --enable-tune-for-coverage]) ;;
      esac])
+
+dnl First, detect incompatibilities between the above configure options.
+AC_MSG_CHECKING([whether configure options are compatible])
+if test "$enable_logging" = yes; then
+  if test "$enable_thread_safe" = yes; then
+    AC_MSG_RESULT([no])
+    AC_MSG_ERROR([enable either logging or thread-safe, not both])
+  fi
+dnl The following test is done only to output a specific error message,
+dnl as there would otherwise be an error due to enable_thread_safe=no.
+  if test "$enable_shared_cache" = yes; then
+    AC_MSG_RESULT([no])
+    AC_MSG_ERROR([shared cache does not work with logging support])
+  fi
+  enable_thread_safe=no
+fi
+if test "$enable_shared_cache" = yes; then
+  if test "$enable_thread_safe" = no; then
+    AC_MSG_RESULT([no])
+    AC_MSG_ERROR([shared cache needs thread-safe support])
+  fi
+  enable_thread_safe=yes
+fi
+AC_MSG_RESULT([yes])
 
 
 dnl

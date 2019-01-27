@@ -268,6 +268,17 @@ main (void)
       err = 1;
     }
 
+  if (
+#ifdef MPFR_WANT_SHARED_CACHE
+      !
+#endif
+      mpfr_buildopt_sharedcache_p ())
+    {
+      printf ("ERROR! mpfr_buildopt_sharedcache_p() and macros"
+              " do not match!\n");
+      err = 1;
+    }
+
   (printf) ("[tversion] TLS = %s, float128 = %s, decimal = %s,"
             " GMP internals = %s\n",
             mpfr_buildopt_tls_p () ? "yes" : "no",
@@ -281,13 +292,14 @@ main (void)
             ")" : "no",
             mpfr_buildopt_gmpinternals_p () ? "yes" : "no");
 
-  (puts) ("[tversion] Shared cache = "
-#if defined(MPFR_WANT_SHARED_CACHE)
-          "yes (" MPFR_THREAD_LOCK_METHOD ")"
+#ifdef MPFR_THREAD_LOCK_METHOD
+# define LOCK_METHOD " (lock method: " MPFR_THREAD_LOCK_METHOD ")"
 #else
-          "no"
+# define LOCK_METHOD ""
 #endif
-          );
+
+  (printf) ("[tversion] Shared cache = %s\n",
+            mpfr_buildopt_sharedcache_p () ? "yes" LOCK_METHOD : "no");
 
   (puts) ("[tversion] intmax_t = "
 #if defined(_MPFR_H_HAVE_INTMAX_T)
