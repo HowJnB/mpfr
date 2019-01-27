@@ -1,4 +1,123 @@
 ------------------------------------------------------------------------
+r13417 | vlefevre | 2019-01-27 23:01:21 +0000 (Sun, 27 Jan 2019) | 1 line
+Changed paths:
+   M /branches/4.0/VERSION
+   M /branches/4.0/configure.ac
+   M /branches/4.0/doc/mpfr.texi
+   M /branches/4.0/src/mpfr.h
+   M /branches/4.0/src/version.c
+
+Updated version to 4.0.2-rc2.
+------------------------------------------------------------------------
+r13416 | vlefevre | 2019-01-27 18:30:16 +0000 (Sun, 27 Jan 2019) | 38 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/NEWS
+   M /branches/4.0/acinclude.m4
+   M /branches/4.0/configure.ac
+   M /branches/4.0/src/mpfr-impl.h
+   M /branches/4.0/src/mpfr-thread.h
+   M /branches/4.0/tests
+   M /branches/4.0/tests/tversion.c
+
+Shared cache: cleanup and various improvements / corrections.
+  * acinclude.m4:
+      - test $enable_shared_cache instead of $mpfr_want_shared_cache;
+      - check ISO C11 thread support and/or POSIX thread support
+        only when necessary;
+      - when checking support for POSIX threads (pthread), also check
+        that pthread_rwlock_t is supported, as it is needed by MPFR
+        and conditionally defined in glibc's bits/pthreadtypes.h (via
+        <pthread.h>);
+      - with POSIX threads, also set CC="$PTHREAD_CC" as documented by
+        ax_pthread (autoconf-archive). This is not guaranteed to work,
+        but according to the ax_pthread.m4 source, in the cases where
+        "$PTHREAD_CC" != "$CC", not setting it will probably not work
+        either;
+      - handle --enable-shared-cache early in MPFR_CONFIGS, because
+        the use of POSIX threads (pthread) may need to change CC,
+        CFLAGS, and LIBS (thus affecting other tests);
+      - removed the now useless MPFR_CHECK_SHARED_CACHE function.
+  * configure.ac: no longer set the mpfr_want_shared_cache variable,
+    as enable_shared_cache (now used) already has the same usage.
+  * acinclude.m4, configure.ac: moved the compatibility test of the
+    configure options even earlier, from acinclude.m4 to configure.ac,
+    just after the code that defines them. Also added an associated
+    AC_MSG_CHECKING message for better clarity.
+  * src/mpfr-impl.h: added a comment about the cache-related types,
+    which depend on the locking methods.
+  * src/mpfr-thread.h: fixed the lock macros:
+      - in case of failure, one must abort, otherwise this would
+        generally be undefined behavior;
+      - added missing "do {} while (0)" (currently not mandatory).
+  * tests/tversion.c: update concerning the shared cache, to be
+    consistent with the other mpfr_buildopt_*_p features:
+      - check that mpfr_buildopt_sharedcache_p() and
+        MPFR_WANT_SHARED_CACHE match;
+      - for the output of the value, test mpfr_buildopt_sharedcache_p()
+        instead of the macro.
+  * NEWS: update.
+(merged changesets r13032,13390-13396,13410,13412 from the trunk)
+------------------------------------------------------------------------
+r13409 | vlefevre | 2019-01-25 02:00:06 +0000 (Fri, 25 Jan 2019) | 6 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/acinclude.m4
+   M /branches/4.0/configure.ac
+   M /branches/4.0/tests
+   M /branches/4.0/tests/trint.c
+
+[configure.ac] By default (i.e. if CFLAGS is not already set), if
+the compiler is GCC not in C++ mode, add the -Wc++-compat warning
+since we expect the code to compile with a C++ compiler.
+[acinclude.m4,tests/trint.c] Fixed C++ compatibility issues detected
+thanks to this option used with -Werror.
+(merged changesets r13406-13408 from the trunk)
+------------------------------------------------------------------------
+r13402 | vlefevre | 2019-01-13 15:39:13 +0000 (Sun, 13 Jan 2019) | 2 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests
+   M /branches/4.0/tests/tcheck.c
+
+[tests/tcheck.c] Corrected meaningless error message.
+(merged changeset r13401 from the trunk)
+------------------------------------------------------------------------
+r13400 | vlefevre | 2019-01-13 01:15:11 +0000 (Sun, 13 Jan 2019) | 3 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/tests
+   M /branches/4.0/tests/tversion.c
+
+[tests/tversion.c] Decimal formats: output the encoding type (DPD/BID).
+(merged changeset r12776 from the trunk, and as a consequence,
+completed the merge of r13003)
+------------------------------------------------------------------------
+r13399 | vlefevre | 2019-01-13 00:17:11 +0000 (Sun, 13 Jan 2019) | 1 line
+Changed paths:
+   M /branches/4.0/VERSION
+   M /branches/4.0/configure.ac
+   M /branches/4.0/doc/mpfr.texi
+   M /branches/4.0/src/mpfr.h
+   M /branches/4.0/src/version.c
+
+Updated version to 4.0.2-dev.
+------------------------------------------------------------------------
+r13398 | vlefevre | 2019-01-13 00:15:31 +0000 (Sun, 13 Jan 2019) | 3 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/doc/mpfr.texi
+
+[doc/mpfr.texi] Minor correction for non-tex versions.
+Thanks to Trevor Spiteri for the bug report.
+(merged changeset r13397 from the trunk)
+------------------------------------------------------------------------
+r13387 | vlefevre | 2019-01-08 13:43:12 +0000 (Tue, 08 Jan 2019) | 1 line
+Changed paths:
+   M /branches/4.0/ChangeLog
+
+ChangeLog update with "LC_ALL=en_US.UTF8 TZ=UTC0 svn log -rHEAD:0 -v".
+------------------------------------------------------------------------
 r13386 | vlefevre | 2019-01-08 13:30:18 +0000 (Tue, 08 Jan 2019) | 3 lines
 Changed paths:
    M /branches/4.0
@@ -12119,7 +12238,7 @@ Changed paths:
    M /trunk/src/get_ld.c
    M /trunk/src/set_ld.c
 
-[src/cmp_ld.c] include float.h so that MPFR_LDBL_MANT_DIG is correcly defined
+[src/cmp_ld.c] include float.h so that MPFR_LDBL_MANT_DIG is correctly defined
 [src/get_ld.c,src/set_ld.c] added comment
 
 ------------------------------------------------------------------------
@@ -33062,7 +33181,7 @@ r7525 | demengeo | 2011-03-04 17:57:53 +0000 (Fri, 04 Mar 2011) | 1 line
 Changed paths:
    M /trunk/tests/trint.c
 
-Previous extented coverage test in trint.c now self generate tests in and compare values
+Previous extended coverage test in trint.c now self generate tests in and compare values
 ------------------------------------------------------------------------
 r7524 | demengeo | 2011-03-04 14:14:13 +0000 (Fri, 04 Mar 2011) | 1 line
 Changed paths:
@@ -43832,7 +43951,7 @@ r6104 | lfousse | 2009-03-15 20:44:23 +0000 (Sun, 15 Mar 2009) | 2 lines
 Changed paths:
    M /trunk/mpfr.h
 
-Add protoype for mpfr_min_prec in mpfr.h.
+Add prototype for mpfr_min_prec in mpfr.h.
 
 ------------------------------------------------------------------------
 r6103 | lfousse | 2009-03-15 20:34:33 +0000 (Sun, 15 Mar 2009) | 2 lines
@@ -51393,7 +51512,7 @@ Changed paths:
    M /trunk/tests/tprintf.c
    M /trunk/vasprintf.c
 
-exponent continuity with one hexadecimal digit ouput
+exponent continuity with one hexadecimal digit output
 
 ------------------------------------------------------------------------
 r5104 | thevenyp | 2007-12-17 14:41:58 +0000 (Mon, 17 Dec 2007) | 2 lines
@@ -62883,7 +63002,7 @@ Changed paths:
    M /trunk/extract.c
    M /trunk/strtofr.c
 
-Fix warnings due to comparaison between signed and unsigned.
+Fix warnings due to comparison between signed and unsigned.
 Reinclude string.h for strtofr.
 
 ------------------------------------------------------------------------
@@ -63121,7 +63240,7 @@ Changed paths:
    M /trunk/COPYING
    M /trunk/COPYING.LIB
 
-Forget thoses two. Update from FSF site.
+Forget those two. Update from FSF site.
 
 ------------------------------------------------------------------------
 r3607 | pelissip | 2005-06-02 16:16:17 +0000 (Thu, 02 Jun 2005) | 2 lines
@@ -64297,7 +64416,7 @@ r3504 | pelissip | 2005-05-01 09:21:43 +0000 (Sun, 01 May 2005) | 2 lines
 Changed paths:
    M /trunk/tests/reuse.c
 
-Add new funcions in reuse test.
+Add new functions in reuse test.
 
 ------------------------------------------------------------------------
 r3503 | zimmerma | 2005-04-30 11:03:47 +0000 (Sat, 30 Apr 2005) | 2 lines
@@ -65685,7 +65804,7 @@ Changed paths:
    M /trunk/tanh.c
    M /trunk/zeta.c
 
-Log input and ouput of functions.
+Log input and output of functions.
 
 ------------------------------------------------------------------------
 r3314 | pelissip | 2005-02-15 10:06:39 +0000 (Tue, 15 Feb 2005) | 2 lines
@@ -65955,7 +66074,7 @@ Update GMP detection to be much more libtool compatible.
 As a consequence some tests using AC_RUN_IFELSE may fail due to ugly things
 like LD_LIBRARY_PATH no set or wrong selection of libgmp.
 So they just produce a warning, not a fatal error.
-TODO: Check if we can avoid thoses problems...
+TODO: Check if we can avoid those problems...
 
 ------------------------------------------------------------------------
 r3283 | pelissip | 2005-02-08 15:49:12 +0000 (Tue, 08 Feb 2005) | 3 lines
@@ -67164,7 +67283,7 @@ r3141 | pelissip | 2004-12-15 14:22:50 +0000 (Wed, 15 Dec 2004) | 2 lines
 Changed paths:
    M /trunk/mpfr.h
 
-Remove thread attribut until I found a good way to use it.
+Remove thread attribute until I found a good way to use it.
 
 ------------------------------------------------------------------------
 r3140 | pelissip | 2004-12-15 10:49:11 +0000 (Wed, 15 Dec 2004) | 2 lines
@@ -67313,7 +67432,7 @@ r3123 | pelissip | 2004-12-09 14:31:23 +0000 (Thu, 09 Dec 2004) | 2 lines
 Changed paths:
    M /trunk/mpfr.h
 
-Add support for new attribut sentinel in incoming GCC 4.0
+Add support for new attribute sentinel in incoming GCC 4.0
 
 ------------------------------------------------------------------------
 r3122 | pelissip | 2004-12-09 13:23:25 +0000 (Thu, 09 Dec 2004) | 2 lines
@@ -67334,7 +67453,7 @@ Changed paths:
 
 Optimize mpfr_set4.
 Inline rounding in mpfr_set4 and mpfr_cache
-mpfr_set4 dosn't return MPFR_EVEN_INEX (It was undocumented before).
+mpfr_set4 doesn't return MPFR_EVEN_INEX (It was undocumented before).
 Fix problems with tests (Avoid mixing MPFR_EVEN_INEX and 1).
 Add MPFR_RNDRAW_EVEN for rounding with MPFR_EVEN_INEX inexact support
 
@@ -68243,7 +68362,7 @@ Changed paths:
    M /trunk/mpfr.texi
 
 Update documentation and NEWS to reflect new functions
-and functionnality.
+and functionality.
 
 ------------------------------------------------------------------------
 r3008 | pelissip | 2004-09-29 12:28:17 +0000 (Wed, 29 Sep 2004) | 2 lines
@@ -68335,7 +68454,7 @@ r3000 | pelissip | 2004-09-28 07:53:46 +0000 (Tue, 28 Sep 2004) | 4 lines
 Changed paths:
    M /trunk/div.c
 
-Replace variable 'near' to 'the_real_near' since MSVC incorreclty
+Replace variable 'near' to 'the_real_near' since MSVC incorrectly
 recognize "far" and "near" as obsolete keywords (100% incorrect, and
 clearly MSVC fault but it doesn't cost many things to change the name).
 
@@ -71537,7 +71656,7 @@ r2616 | pelissip | 2004-01-09 08:58:24 +0000 (Fri, 09 Jan 2004) | 3 lines
 Changed paths:
    M /trunk/isinteger.c
 
-+ Simplify the signular code.
++ Simplify the singular code.
 + Fix potential type errors. (Used mpfr_prec_t instead of mpfr_uexp_t).
 
 ------------------------------------------------------------------------
@@ -72012,7 +72131,7 @@ Changed paths:
    M /trunk/tests/tsub1sp.c
 
 + Add a new test in case of underflow.
-+ Fix bug in case of underflow for sub1 / sub1sp (mpfr_powerof2 could be called with inalid numbers).
++ Fix bug in case of underflow for sub1 / sub1sp (mpfr_powerof2 could be called with invalid numbers).
 
 ------------------------------------------------------------------------
 r2570 | pelissip | 2003-12-09 14:58:26 +0000 (Tue, 09 Dec 2003) | 3 lines
@@ -72113,7 +72232,7 @@ Changed paths:
    M /trunk/mpfr-impl.h
    M /trunk/sub1.c
 
-Optmize a few add1.c/sub1.c by using MPFR_LIKELY / MPFR_UNLIKELY.
+Optimize a few add1.c/sub1.c by using MPFR_LIKELY / MPFR_UNLIKELY.
 
 ------------------------------------------------------------------------
 r2563 | pelissip | 2003-11-21 16:26:19 +0000 (Fri, 21 Nov 2003) | 2 lines
@@ -72138,7 +72257,7 @@ Changed paths:
    M /trunk/sub1.c
    M /trunk/zeta.c
 
-Remove some warnings and potential errors (Comparaison between signed and unsigned).
+Remove some warnings and potential errors (Comparison between signed and unsigned).
 
 ------------------------------------------------------------------------
 r2562 | pelissip | 2003-11-21 15:27:35 +0000 (Fri, 21 Nov 2003) | 4 lines
@@ -79485,7 +79604,7 @@ Changed paths:
    M /trunk/tests/tui_div.c
    M /trunk/tests/tui_sub.c
 
-- use mpfr_test_init to initialize harware floats
+- use mpfr_test_init to initialize hardware floats
 - use #ifdef HAVE_INFS when using DBL_NAN, ...
 - fixed some problems with wrongly converted f-p values (esp. under IRIX)
 
@@ -80570,7 +80689,7 @@ r1684 | daney | 2002-02-06 15:34:46 +0000 (Wed, 06 Feb 2002) | 2 lines
 Changed paths:
    M /trunk/acosh.c
 
-chnage the return values
+change the return values
 
 ------------------------------------------------------------------------
 r1683 | daney | 2002-02-06 15:34:15 +0000 (Wed, 06 Feb 2002) | 2 lines
@@ -80824,7 +80943,7 @@ r1656 | daney | 2002-01-18 09:51:03 +0000 (Fri, 18 Jan 2002) | 2 lines
 Changed paths:
    M /trunk/fma.c
 
-Change indendation + replace "" -> <> in header
+Change indentation + replace "" -> <> in header
 
 ------------------------------------------------------------------------
 r1655 | vlefevre | 2002-01-17 21:45:41 +0000 (Thu, 17 Jan 2002) | 2 lines
@@ -83009,7 +83128,7 @@ r1432 | daney | 2001-10-26 15:29:28 +0000 (Fri, 26 Oct 2001) | 2 lines
 Changed paths:
    M /trunk/fma.c
 
-mixed version beetwen DD and Pau => (gestion des flag inexacte dirige)
+mixed version between DD and Pau => (gestion des flag inexacte dirige)
 
 ------------------------------------------------------------------------
 r1431 | daney | 2001-10-26 15:28:31 +0000 (Fri, 26 Oct 2001) | 2 lines
@@ -84463,7 +84582,7 @@ r1235 | zimmerma | 2001-10-12 12:18:10 +0000 (Fri, 12 Oct 2001) | 2 lines
 Changed paths:
    M /trunk/set_d.c
 
-implemeted inexact flag in mpfr_set_d
+implemented inexact flag in mpfr_set_d
 
 ------------------------------------------------------------------------
 r1234 | zimmerma | 2001-10-12 12:17:24 +0000 (Fri, 12 Oct 2001) | 2 lines
@@ -91872,7 +91991,7 @@ r321 | hanrot | 1999-07-06 12:40:17 +0000 (Tue, 06 Jul 1999) | 2 lines
 Changed paths:
    M /trunk/sqrt3.c
 
-The word added when the exponent is odd was sometimes unitialized.
+The word added when the exponent is odd was sometimes uninitialized.
 
 ------------------------------------------------------------------------
 r320 | hanrot | 1999-07-06 09:39:42 +0000 (Tue, 06 Jul 1999) | 2 lines
