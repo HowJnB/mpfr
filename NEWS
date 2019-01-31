@@ -22,6 +22,7 @@ https://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
 
 Changes from version 4.0.1 to version 4.0.2:
 - Corrected minimal GMP version in the INSTALL file and the MPFR manual.
+- Option -pedantic is now always removed from __GMP_CFLAGS (see INSTALL).
 - Shared caches: cleanup; really detect lock failures (abort in this case).
 - Improved MPFR manual. In particular, corrected/completed the
   mpfr_get_str description in order to follow the historical behavior
@@ -31,7 +32,6 @@ Changes from version 4.0.1 to version 4.0.2:
 Changes from version 4.0.0 to version 4.0.1:
 - Improved MPFR manual.
 - Improved __GMP_CC and __GMP_CFLAGS retrieval (in particular for MS Windows).
-- Option -pedantic is now always removed from __GMP_CFLAGS (see INSTALL).
 - Fixed a build failure on some platforms when --with-gmp-build is used.
 - Bug fixes (see ChangeLog file), in particular in mpfr_div_ui, which
   could yield an incorrectly rounded result to nearest when using
