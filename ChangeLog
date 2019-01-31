@@ -1,4 +1,60 @@
 ------------------------------------------------------------------------
+r13433 | vlefevre | 2019-01-31 20:33:50 +0000 (Thu, 31 Jan 2019) | 2 lines
+Changed paths:
+   M /branches/4.0/NEWS
+
+[NEWS] Put the "Option -pedantic is now always removed [...]" line
+at the right place (4.0.2, not 4.0.1: r13422 was wrong).
+------------------------------------------------------------------------
+r13432 | vlefevre | 2019-01-31 20:29:48 +0000 (Thu, 31 Jan 2019) | 1 line
+Changed paths:
+   M /branches/4.0/VERSION
+   M /branches/4.0/configure.ac
+   M /branches/4.0/doc/mpfr.texi
+   M /branches/4.0/src/mpfr.h
+   M /branches/4.0/src/version.c
+
+Updated version to 4.0.2.
+------------------------------------------------------------------------
+r13431 | vlefevre | 2019-01-31 15:59:16 +0000 (Thu, 31 Jan 2019) | 3 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/src/Makefile.am
+
+[src/Makefile.am] In check-exported-symbols, replaced grep by $(GREP)
+as usual and like in check-gmp-symbols.
+(merged changeset 13429 from the trunk)
+------------------------------------------------------------------------
+r13424 | vlefevre | 2019-01-30 12:45:13 +0000 (Wed, 30 Jan 2019) | 2 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/configure.ac
+
+[configure.ac] Updated comment about default options in CFLAGS for GCC.
+(merged changeset r13423 from the trunk)
+------------------------------------------------------------------------
+r13422 | vlefevre | 2019-01-30 09:26:44 +0000 (Wed, 30 Jan 2019) | 8 lines
+Changed paths:
+   M /branches/4.0
+   M /branches/4.0/INSTALL
+   M /branches/4.0/NEWS
+   M /branches/4.0/configure.ac
+
+Update about CC / CFLAGS settings from GMP (__GMP_CC / __GMP_CFLAGS).
+  * configure.ac: remove -pedantic unconditionally; since r7044, it was
+    removed only when logging was enabled, as at that time only logging
+    was using C extensions.
+  * NEWS: added a line about this change.
+  * INSTALL: updated the note about CC / CFLAGS, removing the obsolete
+    reference to GMP 4.3.0 at the same time.
+(merged changeset r13421 from the trunk)
+------------------------------------------------------------------------
+r13418 | vlefevre | 2019-01-27 23:08:51 +0000 (Sun, 27 Jan 2019) | 1 line
+Changed paths:
+   M /branches/4.0/ChangeLog
+
+ChangeLog update with "LC_ALL=en_US.UTF8 TZ=UTC0 svn log -rHEAD:0 -v".
+------------------------------------------------------------------------
 r13417 | vlefevre | 2019-01-27 23:01:21 +0000 (Sun, 27 Jan 2019) | 1 line
 Changed paths:
    M /branches/4.0/VERSION
