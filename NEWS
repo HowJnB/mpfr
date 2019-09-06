@@ -21,6 +21,8 @@ https://www.gnu.org/licenses/ or write to the Free Software Foundation, Inc.,
 ##############################################################################
 
 Changes from version 4.0.2 to version 4.0.3:
+- Improved MPFR manual.
+- Bug fixes (see ChangeLog file).
 
 Changes from version 4.0.1 to version 4.0.2:
 - Corrected minimal GMP version in the INSTALL file and the MPFR manual.
