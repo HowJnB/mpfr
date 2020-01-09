@@ -162,6 +162,25 @@ main (void)
           );
 #endif
 
+  /* With MinGW64, both __MINGW32__ and __MINGW64__ seem to be defined,
+     but test both, just in case this will change in the future. Tested
+     with "x86_64-w64-mingw32-gcc -dM -E -xc /dev/null" under Debian. */
+#if defined(__MINGW32__) || defined(__MINGW64__)
+  (puts) ("[tversion] MinGW"
+#if defined(__MINGW64__)
+          "64"
+#else
+          "32"
+#endif
+          ": __USE_MINGW_ANSI_STDIO = "
+#if defined(__USE_MINGW_ANSI_STDIO)
+          MAKE_STR(__USE_MINGW_ANSI_STDIO)
+#else
+          "undef"
+#endif
+          );
+#endif
+
 #if defined(__GLIBC__)
   (puts) ("[tversion] __GLIBC__ = " MAKE_STR(__GLIBC__) ", __GLIBC_MINOR__ = "
 #if defined(__GLIBC_MINOR__)
@@ -377,11 +396,11 @@ main (void)
 
   /**************************** ABI information ****************************/
 
-  (printf) ("[tversion] sizeof(long) = %ld"
+  (printf) ("[tversion] sizeof(long) = %ld, sizeof(mpfr_intmax_t) = %ld"
 #if defined(_MPFR_H_HAVE_INTMAX_T)
             ", sizeof(intmax_t) = %ld"
 #endif
-            "\n", (long) sizeof(long)
+            "\n", (long) sizeof(long), (long) sizeof(mpfr_intmax_t)
 #if defined(_MPFR_H_HAVE_INTMAX_T)
             , (long) sizeof(intmax_t)
 #endif
