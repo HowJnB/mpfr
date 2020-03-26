@@ -276,11 +276,11 @@ mpfr_fma (mpfr_ptr s, mpfr_srcptr x, mpfr_srcptr y, mpfr_srcptr z,
 
         MPFR_TMP_MARK (marker);
         un = MPFR_LIMB_SIZE (x) + MPFR_LIMB_SIZE (y);
-        MPFR_TMP_INIT (up, uu, (mpfr_prec_t) un * GMP_NUMB_BITS, un);
-        mpfr_ubf_mul_exact (uu, x, y);
+        MPFR_TMP_INIT (up, uu.m, (mpfr_prec_t) un * GMP_NUMB_BITS, un);
+        mpfr_ubf_mul_exact (uu.u, x, y);
         mpfr_clear_flags ();
-        inexact = mpfr_add (s, (mpfr_srcptr) uu, z, rnd_mode);
-        MPFR_UBF_CLEAR_EXP (uu);
+        inexact = mpfr_add (s, uu.m, z, rnd_mode);
+        MPFR_UBF_CLEAR_EXP (uu.m);
         MPFR_TMP_FREE (marker);
       }
     }

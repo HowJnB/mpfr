@@ -48,27 +48,29 @@ mpfr_fmma_aux (mpfr_ptr z, mpfr_srcptr a, mpfr_srcptr b, mpfr_srcptr c,
 
   un = MPFR_LIMB_SIZE (a) + MPFR_LIMB_SIZE (b);
   vn = MPFR_LIMB_SIZE (c) + MPFR_LIMB_SIZE (d);
-  MPFR_TMP_INIT (up, u, (mpfr_prec_t) un * GMP_NUMB_BITS, un);
-  MPFR_TMP_INIT (vp, v, (mpfr_prec_t) vn * GMP_NUMB_BITS, vn);
+  MPFR_TMP_INIT (up, u.m, (mpfr_prec_t) un * GMP_NUMB_BITS, un);
+  MPFR_TMP_INIT (vp, v.m, (mpfr_prec_t) vn * GMP_NUMB_BITS, vn);
 
-  mpfr_ubf_mul_exact (u, a, b);
-  mpfr_ubf_mul_exact (v, c, d);
+  mpfr_ubf_mul_exact (u.u, a, b);
+  mpfr_ubf_mul_exact (v.u, c, d);
   if (prec_z == MPFR_PREC(a) && prec_z == MPFR_PREC(b) &&
       prec_z == MPFR_PREC(c) && prec_z == MPFR_PREC(d) &&
       un == MPFR_PREC2LIMBS(2 * prec_z))
     {
       MPFR_TMP_INIT (zp, zz, 2 * prec_z, un);
-      MPFR_PREC(u) = MPFR_PREC(v) = 2 * prec_z;
-      inex = (neg == 0) ? mpfr_add (zz, (mpfr_srcptr) u, (mpfr_srcptr) v, rnd)
-        : mpfr_sub (zz, (mpfr_srcptr) u, (mpfr_srcptr) v, rnd);
+      MPFR_PREC(u.m) = MPFR_PREC(v.m) = 2 * prec_z;
+      inex = (neg == 0) ?
+        mpfr_add (zz, u.m, v.m, rnd) :
+        mpfr_sub (zz, u.m, v.m, rnd);
       inex = mpfr_set_1_2 (z, zz, rnd, inex);
     }
   else
-    inex = (neg == 0) ? mpfr_add (z, (mpfr_srcptr) u, (mpfr_srcptr) v, rnd)
-      : mpfr_sub (z, (mpfr_srcptr) u, (mpfr_srcptr) v, rnd);
+    inex = (neg == 0) ?
+      mpfr_add (z, u.m, v.m, rnd) :
+      mpfr_sub (z, u.m, v.m, rnd);
 
-  MPFR_UBF_CLEAR_EXP (u);
-  MPFR_UBF_CLEAR_EXP (v);
+  MPFR_UBF_CLEAR_EXP (u.m);
+  MPFR_UBF_CLEAR_EXP (v.m);
 
   MPFR_TMP_FREE (marker);
 

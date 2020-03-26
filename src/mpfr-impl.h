@@ -2522,15 +2522,20 @@ __MPFR_DECLSPEC extern int __gmpfr_cov_sum_tmd[MPFR_RND_MAX][2][2][3][2][2];
 extern "C" {
 #endif
 
-/* An UBF is like a MPFR number, but with an additional mpz_t member,
-   which is assumed to be present (with a value in it) when the usual
-   exponent field has the value MPFR_EXP_UBF. The goal of this compatible
-   representation is to easily be able to support UBF in "normal" code
-   using the public API. This is some form of "subtyping".
+/* An UBF is like a MPFR number, but with an additional member _mpfr_zexp
+   of type mpz_t, which is assumed to be present (with a value in it)
+   when the usual exponent field has the value MPFR_EXP_UBF. The goal of
+   this compatible representation is to easily be able to support UBF in
+   "normal" code using the public API. This is some form of "subtyping".
 
    Unfortunately this breaks aliasing rules, and C does not provide any way
    to avoid that (except with additional syntax ugliness and API breakage):
    https://news.ycombinator.com/item?id=11753236
+
+   A workaround should be to use mpfr_ptr to access the usual mpfr_t members
+   and mpfr_ubf_ptr to access the additional member _mpfr_zexp. And never
+   use __mpfr_ubf_struct as a declared type; otherwise this would force
+   __mpfr_ubf_struct to be the effective type of the whole object.
 
    The alignment requirement for __mpfr_ubf_struct (UBF) needs to be at least
    as strong as the one for __mpfr_struct (MPFR number); this is not required
@@ -2545,13 +2550,9 @@ extern "C" {
    with variadic functions, as the compiler will not be able to check
    in general. See fmma.c as an example of usage.
 
-   In general, the type used for values that may be UBF must be either
-   mpfr_ubf_t or mpfr_ubf_ptr. The type mpfr_ptr or mpfr_srcptr may be
-   used for UBF only in the case where the pointer has been converted
-   from mpfr_ubf_ptr, in order to ensure valid alignment. For instance,
-   in mpfr_fmma_aux, one uses mpfr_ubf_t to generate the exact products
-   as UBF; then the corresponding pointers are converted to mpfr_srcptr
-   for mpfr_add (even though they point to UBF).
+   When generating a pointer of a value that may be a UBF, make sure
+   that the equivalent of mpfr_ubf_ptr is used, but be careful with
+   the aliasing rules.
 
    Functions that can accept either MPFR arguments (mpfr_ptr type) or
    UBF arguments (mpfr_ubf_ptr type) must use a pointer type that can
@@ -2572,8 +2573,15 @@ typedef struct {
   mpz_t        _mpfr_zexp;
 } __mpfr_ubf_struct;
 
-typedef __mpfr_ubf_struct mpfr_ubf_t[1];
 typedef __mpfr_ubf_struct *mpfr_ubf_ptr;
+
+/* The following is a trick to allocate a UBF as an automatic variable
+   with the required alignment but without forcing the effective type
+   to __mpfr_ubf_struct, which would break the aliasing rules. */
+typedef union {
+  __mpfr_ubf_struct u[1];
+  __mpfr_struct m[1];
+} mpfr_ubf_t;
 
 __MPFR_DECLSPEC void mpfr_ubf_mul_exact (mpfr_ubf_ptr,
                                          mpfr_srcptr, mpfr_srcptr);
@@ -2589,11 +2597,12 @@ __MPFR_DECLSPEC mpfr_exp_t mpfr_ubf_diff_exp (mpfr_srcptr, mpfr_srcptr);
    For practical reasons, the type of the argument x can be either
    mpfr_ubf_ptr or mpfr_ptr, since the latter is used in functions
    that accept both MPFR numbers and UBF's; this is checked by the
-   code "(x)->_mpfr_exp".
+   code "(x)->_mpfr_exp" (the "sizeof" prevents an access, which
+   could be undefined behavior, depending on the type of x).
    This macro can be used when building a UBF. So we do not check
    that the _mpfr_exp field has the value MPFR_EXP_UBF. */
 #define MPFR_ZEXP(x)                            \
-  ((void) (x)->_mpfr_exp,                       \
+  ((void) sizeof ((x)->_mpfr_exp),              \
    ((mpfr_ubf_ptr) (x))->_mpfr_zexp)
 
 /* If x is a UBF, clear its mpz_t exponent. */
@@ -2604,6 +2613,6 @@ __MPFR_DECLSPEC mpfr_exp_t mpfr_ubf_diff_exp (mpfr_srcptr, mpfr_srcptr);
    the interval [MPFR_EXP_MIN,MPFR_EXP_MAX]). */
 #define MPFR_UBF_GET_EXP(x)                                     \
   (MPFR_IS_UBF (x) ? mpfr_ubf_zexp2exp (MPFR_ZEXP (x)) :        \
-   MPFR_GET_EXP ((mpfr_ptr) (x)))
+   MPFR_GET_EXP (x))
 
 #endif /* __MPFR_IMPL_H__ */

@@ -1201,7 +1201,7 @@ static void test_ubf_aux (void)
   mpfr_init2 (w, 2);
 
   for (i = 0; i < 11; i++)
-    p[i] = (mpfr_ptr) x[i];
+    p[i] = x[i].m;
 
   /* exact zero result, with small and large exponents */
   for (i = 0; i < 2; i++)

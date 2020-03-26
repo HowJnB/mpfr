@@ -71,8 +71,10 @@ mpfr_init_get_zexp (mpz_ptr ez, mpfr_srcptr x)
    (mpfr_srcptr can be seen a bit like void *, but is stronger).
    This function does not change the flags, except in case of NaN. */
 void
-mpfr_ubf_mul_exact (mpfr_ubf_ptr a, mpfr_srcptr b, mpfr_srcptr c)
+mpfr_ubf_mul_exact (mpfr_ubf_ptr aa, mpfr_srcptr b, mpfr_srcptr c)
 {
+  mpfr_ptr a = (mpfr_ptr) aa;
+
   MPFR_LOG_FUNC
     (("b[%Pu]=%.*Rg c[%Pu]=%.*Rg",
       mpfr_get_prec (b), mpfr_log_prec, b,
@@ -80,8 +82,8 @@ mpfr_ubf_mul_exact (mpfr_ubf_ptr a, mpfr_srcptr b, mpfr_srcptr c)
      ("a[%Pu]=%.*Rg",
       mpfr_get_prec (a), mpfr_log_prec, a));
 
-  MPFR_ASSERTD ((mpfr_ptr) a != b);
-  MPFR_ASSERTD ((mpfr_ptr) a != c);
+  MPFR_ASSERTD (a != b);
+  MPFR_ASSERTD (a != c);
   MPFR_SIGN (a) = MPFR_MULT_SIGN (MPFR_SIGN (b), MPFR_SIGN (c));
 
   if (MPFR_ARE_SINGULAR (b, c))
