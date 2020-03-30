@@ -286,8 +286,8 @@ test_2exp_extreme_aux (void)
                       "emax=%" MPFR_EXP_FSPEC "d\n",
                       (mpfr_eexp_t) __gmpfr_emin,
                       (mpfr_eexp_t) __gmpfr_emax);
-#ifndef NPRINTF_J
-              printf ("e = %jd\n", em);
+#ifdef MPFR_PRINTF_MAXLM
+              printf ("e = %" MPFR_PRINTF_MAXLM "d\n", em);
 #endif
               printf ("Expected ");
               mpfr_dump (x1);
